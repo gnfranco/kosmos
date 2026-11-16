@@ -1,0 +1,292 @@
+# Brazilian Portuguese translations for Kosmos Lex (Linvora).
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Kosmos Lex — Linvora pt_BR\n"
+"PO-Revision-Date: 2026-11-16 15:47-0300\n"
+"Last-Translator: Linvora\n"
+"Language-Team: Linvora\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Password"
+msgstr "Senha"
+
+msgid "Another user signs in with this email."
+msgstr "Outro usuário já utiliza este e-mail para acessar o sistema."
+
+msgid "Your Login Verification Code"
+msgstr "Seu código de verificação de acesso"
+
+#, python-format
+msgid ""
+"Your verification code is: %(code)s\n"
+"\n"
+"This code expires in 5 minutes."
+msgstr ""
+"Seu código de verificação é: %(code)s\n"
+"\n"
+"Este código expira em 5 minutos."
+
+#, python-format
+msgid "%(count)d second"
+msgid_plural "%(count)d seconds"
+msgstr[0] "%(count)d segundo"
+msgstr[1] "%(count)d segundos"
+
+#, python-format
+msgid "%(count)d minute"
+msgid_plural "%(count)d minutes"
+msgstr[0] "%(count)d minuto"
+msgstr[1] "%(count)d minutos"
+
+#, python-format
+msgid "Too many failed sign-ins. Try again in %(wait)s."
+msgstr ""
+"Muitas tentativas de acesso malsucedidas. Tente novamente em %(wait)s."
+
+msgid "The email address or password is not right."
+msgstr "E-mail ou senha incorretos."
+
+msgid "Please log in again."
+msgstr "Entre novamente na sua conta."
+
+msgid "Code has expired. Please log in again."
+msgstr "O código expirou. Entre novamente na sua conta."
+
+msgid "Too many incorrect codes. Please log in again."
+msgstr "Muitos códigos incorretos. Entre novamente na sua conta."
+
+msgid "Invalid verification code."
+msgstr "Código de verificação inválido."
+
+msgid "That code is not right."
+msgstr "Código incorreto."
+
+msgid "All Dates"
+msgstr "Todas as datas"
+
+msgid "Today"
+msgstr "Hoje"
+
+msgid "Yesterday"
+msgstr "Ontem"
+
+msgid "This Week"
+msgstr "Esta semana"
+
+msgid "Last Week"
+msgstr "Semana passada"
+
+msgid "This Month"
+msgstr "Este mês"
+
+msgid "Open navigation menu"
+msgstr "Abrir menu de navegação"
+
+msgid "Collections"
+msgstr "Cobranças"
+
+msgid "Past Due"
+msgstr "Em atraso"
+
+msgid "No outstanding balances"
+msgstr "Nenhum saldo em aberto"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Low Trust Available (Pending)"
+msgstr "Saldo fiduciário baixo (pendente)"
+
+msgid "No matters with low trust available"
+msgstr "Nenhum processo com saldo fiduciário baixo"
+
+msgid "Upcoming Events"
+msgstr "Próximos compromissos"
+
+msgid "Calendar"
+msgstr "Agenda"
+
+msgid "Tomorrow"
+msgstr "Amanhã"
+
+msgid "All day"
+msgstr "Dia inteiro"
+
+msgid "to"
+msgstr "até"
+
+msgid "Work in Progress"
+msgstr "Horas a faturar"
+
+msgid "Group by"
+msgstr "Agrupar por"
+
+msgid "By"
+msgstr "Por"
+
+msgid "No work in progress"
+msgstr "Nenhuma hora a faturar"
+
+msgid "User"
+msgstr "Usuário"
+
+msgid "Hours"
+msgstr "Horas"
+
+msgid "Gross"
+msgstr "Bruto"
+
+msgid "Comp"
+msgstr "Abatimentos"
+
+msgid "Net"
+msgstr "Líquido"
+
+msgid "No work in progress."
+msgstr "Nenhuma hora a faturar."
+
+msgid "Matter"
+msgstr "Processo"
+
+msgid "Log In"
+msgstr "Entrar"
+
+msgid "Log in to your account"
+msgstr "Acesse sua conta"
+
+msgid "Show password"
+msgstr "Mostrar senha"
+
+msgid "Hide password"
+msgstr "Ocultar senha"
+
+msgid "Forgot Password?"
+msgstr "Esqueceu a senha?"
+
+msgid "Password Reset Complete"
+msgstr "Senha redefinida"
+
+msgid "Password Reset"
+msgstr "Redefinir senha"
+
+msgid "Your new password has been set."
+msgstr "Sua nova senha foi definida."
+
+msgid "You may now"
+msgstr "Você já pode"
+
+msgid "log in"
+msgstr "entrar"
+
+msgid "Enter new password"
+msgstr "Informe a nova senha"
+
+msgid "Set a new password"
+msgstr "Definir nova senha"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid ""
+"This password reset link is invalid or has already been used. Please request"
+" a new one."
+msgstr ""
+"Este link de redefinição é inválido ou já foi utilizado. Solicite um novo "
+"link."
+
+msgid "Password Reset Sent"
+msgstr "E-mail de redefinição enviado"
+
+msgid "We sent instructions to reset your password. Please check your email."
+msgstr ""
+"Enviamos as instruções para redefinir sua senha. Verifique seu e-mail."
+
+msgid ""
+"If you cannot find the email, check your spam folder and confirm the email "
+"address used."
+msgstr ""
+"Se não encontrar a mensagem, confira a pasta de spam e confirme o endereço "
+"de e-mail informado."
+
+msgid "Forgot Your Password?"
+msgstr "Esqueceu sua senha?"
+
+msgid "Please enter the email address associated with your account."
+msgstr "Informe o endereço de e-mail associado à sua conta."
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Authenticator Code"
+msgstr "Código do autenticador"
+
+msgid "Enter the code shown in your authenticator app."
+msgstr "Digite o código exibido no seu aplicativo autenticador."
+
+msgid "Back to Login"
+msgstr "Voltar ao acesso"
+
+msgid "Verify"
+msgstr "Verificar"
+
+msgid "Verify Code"
+msgstr "Verificar código"
+
+msgid "Enter the verification code sent to your email."
+msgstr "Digite o código de verificação enviado ao seu e-mail."
+
+msgid "Dash"
+msgstr "Painel"
+
+msgid "Matters"
+msgstr "Processos"
+
+msgid "Tasks"
+msgstr "Tarefas"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "Activity"
+msgstr "Apontamentos"
+
+msgid "Invoicing"
+msgstr "Faturamento"
+
+msgid "Intakes"
+msgstr "Atendimentos iniciais"
+
+msgid "Reports"
+msgstr "Relatórios"
+
+msgid "Cases"
+msgstr "Dossiês"
+
+msgid "Accounting"
+msgstr "Contabilidade"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "Shortcuts"
+msgstr "Atalhos"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Account"
+msgstr "Conta"
+
+msgid "Log out"
+msgstr "Sair"
+
+msgid "Toggle sidebar"
+msgstr "Expandir ou recolher menu lateral"

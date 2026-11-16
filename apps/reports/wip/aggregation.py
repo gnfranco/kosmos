@@ -21,6 +21,7 @@ from django.db.models import (
     When,
 )
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.activity.time.models import TimeEntry
 
@@ -70,12 +71,12 @@ def _wip_base(date_min=None, date_max=None):
 
 # Quick-filter periods for the dashboard, mirroring the Activity tab.
 WIP_PERIODS = [
-    ("all", "All Dates"),
-    ("today", "Today"),
-    ("yesterday", "Yesterday"),
-    ("this_week", "This Week"),
-    ("last_week", "Last Week"),
-    ("this_month", "This Month"),
+    ("all", _("All Dates")),
+    ("today", _("Today")),
+    ("yesterday", _("Yesterday")),
+    ("this_week", _("This Week")),
+    ("last_week", _("Last Week")),
+    ("this_month", _("This Month")),
 ]
 
 

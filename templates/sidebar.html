@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="{% url 'tasks:index' %}"
@@ -19,56 +20,56 @@
         hx-select="#main-content"
         hx-swap="outerHTML show:window:top">
       <li {% if app == 'dash' %}class="active"{% endif %}>
-        <a id="nav-dash" href="{% url 'dash:index' %}" data-tooltip="Dash">
+        <a id="nav-dash" href="{% url 'dash:index' %}" data-tooltip="{% trans "Dash" %}">
           <i class="icon-layout-dashboard"></i>
-          <span class="sidebar-label">Dash</span>
+          <span class="sidebar-label">{% trans "Dash" %}</span>
         </a>
       </li>
       <li {% if app == 'matters' %}class="active"{% endif %}>
         <a id="nav-matters"
            href="{% url 'matters:index' %}"
-           data-tooltip="Matters">
+           data-tooltip="{% trans "Matters" %}">
           <i class="icon-briefcase-business"></i>
-          <span class="sidebar-label">Matters</span>
+          <span class="sidebar-label">{% trans "Matters" %}</span>
         </a>
       </li>
       <li {% if app == 'events' %}class="active"{% endif %}>
         <a id="nav-events"
            href="{% url 'calendar:index' %}"
-           data-tooltip="Calendar">
+           data-tooltip="{% trans "Calendar" %}">
           <i class="icon-calendar"></i>
-          <span class="sidebar-label">Calendar</span>
+          <span class="sidebar-label">{% trans "Calendar" %}</span>
         </a>
       </li>
       <li {% if app == 'tasks' %}class="active"{% endif %}>
-        <a id="nav-tasks" href="{% url 'tasks:index' %}" data-tooltip="Tasks">
+        <a id="nav-tasks" href="{% url 'tasks:index' %}" data-tooltip="{% trans "Tasks" %}">
           <i class="icon-square-check-big"></i>
-          <span class="sidebar-label">Tasks</span>
+          <span class="sidebar-label">{% trans "Tasks" %}</span>
         </a>
       </li>
       <li {% if app == 'contacts' %}class="active"{% endif %}>
         <a id="nav-contacts"
            href="{% url 'contacts:index' %}"
-           data-tooltip="Contacts">
+           data-tooltip="{% trans "Contacts" %}">
           <i class="icon-users"></i>
-          <span class="sidebar-label">Contacts</span>
+          <span class="sidebar-label">{% trans "Contacts" %}</span>
         </a>
       </li>
       <li {% if app == 'activity' %}class="active"{% endif %}>
         <a id="nav-activity"
            href="{% url 'activity:time-index' %}"
-           data-tooltip="Activity">
+           data-tooltip="{% trans "Activity" %}">
           <i class="icon-clock"></i>
-          <span class="sidebar-label">Activity</span>
+          <span class="sidebar-label">{% trans "Activity" %}</span>
         </a>
       </li>
       {% if user.is_admin or user.perm_financial %}
         <li class="nav-item-invoicing{% if app == 'invoicing' %} active{% endif %}">
           <a id="nav-invoicing"
              href="{% url 'invoicing:invoices-index' %}"
-             data-tooltip="Invoicing">
+             data-tooltip="{% trans "Invoicing" %}">
             <i class="icon-receipt"></i>
-            <span class="sidebar-label">Invoicing</span>
+            <span class="sidebar-label">{% trans "Invoicing" %}</span>
           </a>
         </li>
       {% endif %}
@@ -76,9 +77,9 @@
         <li {% if app == 'intakes' %}class="active"{% endif %}>
           <a id="nav-intakes"
              href="{% url 'intakes:index' %}"
-             data-tooltip="Intakes">
+             data-tooltip="{% trans "Intakes" %}">
             <i class="icon-inbox"></i>
-            <span class="sidebar-label">Intakes</span>
+            <span class="sidebar-label">{% trans "Intakes" %}</span>
           </a>
         </li>
       {% endif %}
@@ -86,9 +87,9 @@
         <li {% if app == 'reports' %}class="active"{% endif %}>
           <a id="nav-reports"
              href="{% url 'reports:index' %}"
-             data-tooltip="Reports">
+             data-tooltip="{% trans "Reports" %}">
             <i class="icon-chart-no-axes-combined"></i>
-            <span class="sidebar-label">Reports</span>
+            <span class="sidebar-label">{% trans "Reports" %}</span>
           </a>
         </li>
       {% endif %}
@@ -100,9 +101,9 @@
       {% endcomment %}
       {% if case_file_enabled %}
         <li {% if app == 'case' %}class="active"{% endif %}>
-          <a id="nav-case" href="{% url 'case:case-index' %}" data-tooltip="Cases">
+          <a id="nav-case" href="{% url 'case:case-index' %}" data-tooltip="{% trans "Cases" %}">
             <i class="icon-notebook-tabs"></i>
-            <span class="sidebar-label">Cases</span>
+            <span class="sidebar-label">{% trans "Cases" %}</span>
           </a>
         </li>
       {% endif %}
@@ -115,9 +116,9 @@
         <li {% if app == 'accounting' %}class="active"{% endif %}>
           <a id="nav-accounting"
              href="{% url 'accounting:index' %}"
-             data-tooltip="Accounting">
+             data-tooltip="{% trans "Accounting" %}">
             <i class="icon-wallet-cards"></i>
-            <span class="sidebar-label">Accounting</span>
+            <span class="sidebar-label">{% trans "Accounting" %}</span>
           </a>
         </li>
       {% endif %}
@@ -127,18 +128,18 @@
         <a href="#"
            hx-get="{% url 'search:search' %}"
            hx-target="#htmx-modal-container"
-           data-tooltip="Search">
+           data-tooltip="{% trans "Search" %}">
           <i class="icon-search"></i>
-          <span class="sidebar-label">Search</span>
+          <span class="sidebar-label">{% trans "Search" %}</span>
         </a>
       </li>
       <li>
         <a href="#"
            hx-get="{% url 'settings:keyboard-shortcuts' %}"
            hx-target="#htmx-modal-container"
-           data-tooltip="Shortcuts">
+           data-tooltip="{% trans "Shortcuts" %}">
           <i class="icon-keyboard"></i>
-          <span class="sidebar-label">Shortcuts</span>
+          <span class="sidebar-label">{% trans "Shortcuts" %}</span>
         </a>
       </li>
       {% comment %}
@@ -153,9 +154,9 @@
            hx-target="#main-content"
            hx-select="#main-content"
            hx-swap="outerHTML show:window:top"
-           data-tooltip="Settings">
+           data-tooltip="{% trans "Settings" %}">
           <i class="icon-settings"></i>
-          <span class="sidebar-label">Settings</span>
+          <span class="sidebar-label">{% trans "Settings" %}</span>
         </a>
       </li>
       {% comment %}
@@ -174,7 +175,7 @@
              @click.prevent="toggle()"
              :aria-expanded="open"
              aria-haspopup="menu"
-             aria-label="Account"
+             aria-label="{% trans "Account" %}"
              data-tooltip="{{ user.first_name|default:user.username }}">
             <i class="icon-{{ user.nav_icon }}"></i>
             <span class="sidebar-label">{{ user.first_name|default:user.username }}</span>
@@ -188,7 +189,7 @@
               <form method="post" action="{% url 'accounts:logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="dropdown-item">
-                  <i class="icon-log-out"></i> Log out
+                  <i class="icon-log-out"></i> {% trans "Log out" %}
                 </button>
               </form>
             </li>
@@ -199,7 +200,7 @@
   </nav>
   <button class="sidebar-toggle"
           id="sidebar-toggle"
-          aria-label="Toggle sidebar">
+          aria-label="{% trans "Toggle sidebar" %}">
     <i class="icon-panel-left-close"></i>
   </button>
 </aside>

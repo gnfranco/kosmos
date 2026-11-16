@@ -1,5 +1,10 @@
 {% load static %}
+{% load i18n %}
 {% load cache_buster %}
+{% get_current_language as CURRENT_LANGUAGE %}
+<!DOCTYPE html>
+<html lang="{{ CURRENT_LANGUAGE }}">
+<head>
 <!DOCTYPE html>
 <meta charset="UTF-8" content="" />
 <title>Kosmos</title>
@@ -40,6 +45,8 @@
     document.documentElement.setAttribute('data-theme', resolved);
   })();
 </script>
+</head>
+<body>
 <div class="container vertical-center">
   {% block content %}
   {% endblock content %}
@@ -47,3 +54,5 @@
 {# Paints the favicon from the theme's tokens, as on the signed-in pages. #}
 <script src="{% static_v 'js/theme.js' %}"></script>
 <script src="{% static_v 'js/password-toggle.js' %}"></script>
+</body>
+</html>

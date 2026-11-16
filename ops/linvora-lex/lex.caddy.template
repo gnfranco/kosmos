@@ -1,0 +1,22 @@
+# Kosmos Lex: HTTPS automatico pelo Caddy, autenticacao no Django/2FA.
+# Host isolado de adv.linvora.com.br e app.linvora.com.br.
+lex.linvora.com.br {
+    encode zstd gzip
+    header {
+        Strict-Transport-Security "max-age=86400"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+    route {
+        @internal_only path /health/* /mcp /mcp/* /.well-known/* /admin /admin/*
+        respond @internal_only 404
+        @static path /static/*
+        handle @static {
+            root * /srv/kosmos-lex/app
+            file_server
+        }
+        handle {
+            reverse_proxy 127.0.0.1:18085
+        }
+    }
+}

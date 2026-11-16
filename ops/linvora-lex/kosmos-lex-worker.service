@@ -1,0 +1,24 @@
+[Unit]
+Description=Kosmos Lex (Linvora) Django-Q background worker - homologacao
+Wants=network-online.target
+After=network-online.target postgresql.service
+
+[Service]
+Type=simple
+User=kosmoslex
+Group=kosmoslex
+WorkingDirectory=/srv/kosmos-lex/app
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/srv/kosmos-lex/app/.venv/bin/python manage.py qcluster
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+MemoryMax=1100M
+TasksMax=160
+
+[Install]
+WantedBy=multi-user.target

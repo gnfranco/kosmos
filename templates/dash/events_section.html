@@ -1,3 +1,4 @@
+{% load i18n %}
 {% comment %}
 Upcoming Events (apps/dash/events.py): a row of cards, the pending
 events the user may see, soonest first. One gone by and still pending
@@ -9,11 +10,11 @@ a phone. With nothing pending the section shows nothing.
 {% if upcoming_events %}
   <div class="dash-row">
     <div class="events-header">
-      <h2>Upcoming Events</h2>
+      <h2>{% trans "Upcoming Events" %}</h2>
       <a href="{% url 'calendar:index' %}"
          class="btn-ghost"
-         aria-label="Calendar"
-         title="Calendar"><i class="icon-arrow-up-right"></i></a>
+         aria-label="{% trans "Calendar" %}"
+         title="{% trans "Calendar" %}"><i class="icon-arrow-up-right"></i></a>
     </div>
     <div class="event-cards">
       {% for event in upcoming_events %}
@@ -24,21 +25,21 @@ a phone. With nothing pending the section shows nothing.
           <div class="event-card-when">
             <i class="icon-calendar with-text"></i>
             {% if event.date == yesterday %}
-              Yesterday
+              {% trans "Yesterday" %}
             {% elif event.date == today %}
-              Today
+              {% trans "Today" %}
             {% elif event.date == tomorrow %}
-              Tomorrow
+              {% trans "Tomorrow" %}
             {% else %}
-              {{ event.date|date:"D, M j" }}
+              {{ event.date|date:"SHORT_DATE_FORMAT" }}
             {% endif %}
             ·
             {% if event.start_time %}
-              {{ event.start_time|time:"g:i A" }}
+              {{ event.start_time|time:"TIME_FORMAT" }}
             {% else %}
-              All day
+              {% trans "All day" %}
             {% endif %}
-            {% if event.end_date %}· to {{ event.end_date|date:"D, M j" }}{% endif %}
+            {% if event.end_date %}· {% trans "to" %} {{ event.end_date|date:"SHORT_DATE_FORMAT" }}{% endif %}
           </div>
           {% if event.matter %}
             <a class="event-card-matter"
