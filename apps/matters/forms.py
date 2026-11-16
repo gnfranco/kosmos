@@ -1,5 +1,9 @@
 from django import forms
 from django.db.models import Q
+from django.utils.translation import (
+    get_language,
+    gettext_lazy as _,
+)
 
 from apps.calendar.widgets import CheckSelect
 from apps.contacts.models import Contact
@@ -77,11 +81,13 @@ class MatterForm(forms.ModelForm):
             "client": ContactComboboxWidget(),
             # Ticked in a dropdown of check rows; the button reads the one
             # name, or how many are ticked
-            "billing_contacts": CheckSelect(empty_label="None", many_label="copied"),
+            "billing_contacts": CheckSelect(
+                empty_label=_("None"), many_label=_("copied")
+            ),
             "date_start": forms.DateInput(attrs={"type": "date"}),
             "jurisdiction": forms.TextInput(),
             "billable": forms.Select(
-                choices=((True, "Yes"), (False, "No (Administrative)")),
+                choices=((True, _("Yes")), (False, _("No (Administrative)"))),
             ),
             "billing_type": forms.Select(
                 attrs={"onchange": "toggleFlatFeeAmount()"},
@@ -93,15 +99,21 @@ class MatterForm(forms.ModelForm):
         }
 
         labels = {
-            "name": "Matter Name",
-            "date_start": "Open Date",
-            "clio_matter_id": "Clio Matter",
-            "client_reference_id": "Client Reference",
-            "practice_area": "Practice Area",
-            "billing_contacts": "Additional Billing Contacts",
-            "billing_type": "Billing Type",
-            "flat_fee_amount": "Flat Fee Amount",
-            "deferred_fees": "Deferred Fee Arrangement",
+            "client": _("Client"),
+            "status": _("Status"),
+            "name": _("Matter Name"),
+            "date_start": _("Open Date"),
+            "description": _("Description"),
+            "work_status": _("Work Status"),
+            "jurisdiction": _("Jurisdiction"),
+            "billable": _("Billable"),
+            "clio_matter_id": _("Clio Matter"),
+            "client_reference_id": _("Client Reference"),
+            "practice_area": _("Practice Area"),
+            "billing_contacts": _("Additional Billing Contacts"),
+            "billing_type": _("Billing Type"),
+            "flat_fee_amount": _("Flat Fee Amount"),
+            "deferred_fees": _("Deferred Fee Arrangement"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -151,7 +163,46 @@ class MatterForm(forms.ModelForm):
         # focusable, with no error shown to the user.
         self.use_required_attribute = False
 
-        # Filter practice areas to only show active ones
+        # Existing cases must remain editable when their historical category
+        # was deactivated. New cases only offer active categories.
+        current_area_id = self.instance.practice_area_id
         self.fields["practice_area"].queryset = PracticeArea.objects.filter(
-            is_active=True
-        )
+            Q(is_active=True) | Q(pk=current_area_id)
+        ).distinct()
+
+        # The canonical status values stay on Matter; localize widget labels
+        # rather than duplicating the allowed lifecycle in Form.Meta.
+        status_labels = {
+            "Pending": _("Pending"),
+            "Open": _("Open"),
+            "Complete": _("Complete"),
+            "Closed": _("Closed"),
+        }
+        self.fields["status"].widget.choices = [
+            (value, status_labels.get(value, label))
+            for value, label in Matter.STATUS_CHOICES
+        ]
+
+        # Keep persisted billing codes unchanged; translate only their labels.
+        billing_labels = {"HOURLY": _("Hourly"), "FLAT_FEE": _("Flat Fee")}
+        self.fields["billing_type"].choices = [
+            (code, billing_labels.get(code, label))
+            for code, label in self.fields["billing_type"].choices
+        ]
+
+        # A native type=date input displays in the browser's locale (often
+        # MM/DD/YYYY on Android despite Django's pt-BR setting). Use an
+        # explicit Brazilian text format for this form only, while accepting
+        # ISO values from older clients and keeping a real DateField in DB.
+        if (get_language() or "").lower().replace("_", "-") == "pt-br":
+            date_field = self.fields["date_start"]
+            date_field.widget = forms.DateInput(
+                format="%d/%m/%Y",
+                attrs={
+                    "type": "text",
+                    "inputmode": "numeric",
+                    "placeholder": "DD/MM/AAAA",
+                    "autocomplete": "off",
+                },
+            )
+            date_field.input_formats = ["%d/%m/%Y", "%Y-%m-%d"]

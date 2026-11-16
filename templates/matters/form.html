@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg matter-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
@@ -42,7 +42,7 @@
                 class="btn btn-secondary"
                 @click="$dispatch('close-modal')">{% trans "Cancel" %}</button>
       {% endif %}
-      <button type="submit" form="matter-form" class="btn btn-success">{% trans "Submit" %}</button>
+      <button type="submit" form="matter-form" class="btn btn-success">{% trans "Save" %}</button>
     </div>
   </div>
 </div>

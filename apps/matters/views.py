@@ -478,7 +478,7 @@ def add(request):
 
     # if no post data has been submitted, show the matter form
     else:
-        today = timezone.localdate().strftime("%Y-%m-%d")
+        today = timezone.localdate()
         form = MatterForm(initial={"date_start": today}, use_required_attribute=False)
 
     context = {

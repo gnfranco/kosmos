@@ -1,11 +1,12 @@
+{% load i18n %}
 <div class="modal-dialog modal-sm">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
         {% if practice_area %}
-          Edit Practice Area
+          {% trans "Edit Practice Area" %}
         {% else %}
-          Add Practice Area
+          {% trans "Add Practice Area" %}
         {% endif %}
       </h1>
       <div>
@@ -27,8 +28,8 @@
     <div class="modal-footer">
       <button type="button"
               class="btn btn-secondary"
-              @click="$dispatch('close-modal')">Cancel</button>
-      <button type="submit" form="practice-area-form" class="btn btn-success">Submit</button>
+              @click="$dispatch('close-modal')">{% trans "Cancel" %}</button>
+      <button type="submit" form="practice-area-form" class="btn btn-success">{% trans "Save" %}</button>
     </div>
   </div>
 </div>
