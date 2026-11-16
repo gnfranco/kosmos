@@ -1,5 +1,5 @@
 # Pilot separated from adv.linvora.com.br and from the Linvora SaaS app.
-# Replace @BASIC_AUTH_HASH@ with: caddy hash-password --plaintext '<random>'
+# bcrypt hash is generated from the random pilot password by install-services.sh
 lex.linvora.com.br {
     encode zstd gzip
     basicauth {
