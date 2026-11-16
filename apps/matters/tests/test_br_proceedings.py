@@ -11,7 +11,7 @@ from apps.accounts.models import CustomUser
 from apps.matters.models import Matter
 from apps.matters.proceedings import views
 from apps.matters.proceedings.cnj import normalize_cnj
-from apps.matters.proceedings.forms import ProceedingForm
+from apps.matters.proceedings.forms import BRLAmountField, ProceedingForm
 from apps.matters.proceedings.models import Proceeding
 
 
@@ -85,6 +85,31 @@ class CnjValidationTests(SimpleTestCase):
             self.assertEqual(
                 form.cleaned_data["claim_updated_brl"], Decimal("13000.75")
             )
+
+    def test_brazilian_integer_grouping_is_not_interpreted_as_cents(self):
+        with translation.override("pt-br"):
+            field = BRLAmountField(
+                required=False, localize=True, max_digits=15, decimal_places=2
+            )
+            self.assertEqual(field.clean("12.500"), Decimal("12500"))
+            self.assertEqual(field.clean("12.500,50"), Decimal("12500.50"))
+            self.assertEqual(field.clean("12500.50"), Decimal("12500.50"))
+            self.assertEqual(field.clean("12500,50"), Decimal("12500.50"))
+            for invalid in ("12.500.50", "1,234.50", "12,500,50"):
+                with self.subTest(invalid=invalid):
+                    with self.assertRaises(ValidationError):
+                        field.clean(invalid)
+
+    def test_cnj_scheme_requires_number(self):
+        form = ProceedingForm(data={
+            "numbering_scheme": "CNJ",
+            "date_filed": "2025-02-05",
+            "forum": "TRF 3",
+            "status": "Ongoing",
+            "primary": "False",
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn("case_number", form.errors)
 
 
 class BrazilianProceedingPersistenceTests(TestCase):

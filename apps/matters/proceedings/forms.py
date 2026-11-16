@@ -1,5 +1,6 @@
 """Proceeding form with an optional CNJ validator and BRL-only claim fields."""
 import re
+from decimal import Decimal, InvalidOperation
 
 from django import forms
 from django.utils import translation
@@ -14,20 +15,36 @@ from config.settings import CustomFormRendererCompact
 _BR_AMOUNT = re.compile(
     r"^(?:[0-9]+|[0-9]{1,3}(?:\.[0-9]{3})+)(?:,[0-9]{1,2})?$"
 )
+_BR_GROUPED_INTEGER = re.compile(r"^[0-9]{1,3}(?:\.[0-9]{3})+$")
+_CANONICAL_DECIMAL = re.compile(r"^[0-9]+\.[0-9]{1,2}$")
 
 
 class BRLAmountField(forms.DecimalField):
-    """Accept 12500,50 and 12.500,50 in pt-BR without losing centavos."""
+    """Parse pt-BR currency unambiguously, preserving amounts and cents."""
 
     def to_python(self, value):
-        if isinstance(value, str) and "," in value and (
+        if not isinstance(value, str) or not (
             translation.get_language() or ""
         ).lower().startswith("pt"):
-            value = value.strip()
+            return super().to_python(value)
+
+        value = value.strip()
+        if not value:
+            return super().to_python(value)
+        if "," in value:
             if not _BR_AMOUNT.fullmatch(value):
                 raise forms.ValidationError(_("Enter a valid amount in BRL."))
             value = value.replace(".", "").replace(",", ".")
-        return super().to_python(value)
+        elif _BR_GROUPED_INTEGER.fullmatch(value):
+            value = value.replace(".", "")
+        elif not (value.isascii() and value.isdigit()) and not _CANONICAL_DECIMAL.fullmatch(value):
+            raise forms.ValidationError(_("Enter a valid amount in BRL."))
+        try:
+            # A Decimal bypasses Django's locale separator sanitizer, which
+            # would otherwise interpret the single dot in 12.500 as decimal.
+            return super().to_python(Decimal(value))
+        except InvalidOperation:
+            raise forms.ValidationError(_("Enter a valid amount in BRL."))
 
 
 class ProceedingForm(forms.ModelForm):
@@ -97,5 +114,7 @@ class ProceedingForm(forms.ModelForm):
     def clean_case_number(self):
         value = (self.cleaned_data.get("case_number") or "").strip()
         if self.cleaned_data.get("numbering_scheme") == "CNJ":
+            if not value:
+                raise forms.ValidationError(_("A CNJ number is required."))
             return normalize_cnj(value)
         return value

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kosmos Lex — Linvora pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 16:46-0300\n"
+"POT-Creation-Date: 2026-11-16 16:59-0300\n"
 "PO-Revision-Date: 2026-11-16 16:30-0300\n"
 "Last-Translator: Linvora\n"
 "Language-Team: Linvora\n"
@@ -136,6 +136,9 @@ msgstr "Data do trânsito em julgado"
 
 msgid "Court case URL"
 msgstr "Link do processo no tribunal"
+
+msgid "A CNJ number is required."
+msgstr "O número CNJ é obrigatório."
 
 msgid "Other / legacy number"
 msgstr "Outro formato / número antigo"
