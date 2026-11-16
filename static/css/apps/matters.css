@@ -861,3 +861,38 @@ Matter Overview tab
   border-right: 1px solid var(--selected-border);
   margin-right: -1px;
 }
+
+/* Lex Brazil: keep the case form usable above the Android browser keyboard. */
+@media (width <= 767px) {
+  .matter-form-dialog {
+    height: calc(100vh - 1rem);
+    height: calc(100dvh - 1rem);
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+
+  .matter-form-dialog .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .matter-form-dialog .modal-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .matter-form-dialog .modal-footer {
+    flex: 0 0 auto;
+    background: var(--background-section);
+  }
+
+  .matter-form-dialog input,
+  .matter-form-dialog select,
+  .matter-form-dialog button {
+    min-height: 2.75rem;
+  }
+}

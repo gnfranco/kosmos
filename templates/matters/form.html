@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg matter-form-dialog">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
@@ -10,7 +10,7 @@
         {% endif %}
       </h1>
       <div>
-        <button type="button" @click="$dispatch('close-modal')">
+        <button type="button" @click="$dispatch('close-modal')" aria-label="{% trans 'Close' %}">
           <i class="icon-x"></i>
         </button>
       </div>
