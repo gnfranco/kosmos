@@ -38,6 +38,9 @@ class CnjValidationTests(SimpleTestCase):
         form = ProceedingForm(data={
             "numbering_scheme": "OTHER",
             "case_number": "20CV141360",
+            "date_filed": "2025-02-05",
+            "forum": "Superior Court",
+            "status": "Ongoing",
             "primary": "False",
         })
         self.assertTrue(form.is_valid(), form.errors.as_text())
@@ -47,6 +50,9 @@ class CnjValidationTests(SimpleTestCase):
         form = ProceedingForm(data={
             "numbering_scheme": "CNJ",
             "case_number": "5000094-41.2025.4.03.6312",
+            "date_filed": "2025-02-05",
+            "forum": "TRF 3",
+            "status": "Ongoing",
             "primary": "False",
         })
         self.assertFalse(form.is_valid())
