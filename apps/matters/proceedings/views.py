@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.utils import translation
+from django.views.decorators.http import require_http_methods, require_POST
 from django.utils import timezone
 
 from apps.accounts.access import matter_access_required
@@ -90,6 +92,9 @@ def add(request, id):
             initial = {"date_filed": today, "nickname": "Main", "primary": True}
         else:
             initial = {"date_filed": today}
+        # Default *new* Brazilian records to CNJ; existing legacy rows are unchanged.
+        if (translation.get_language() or "").lower().startswith("pt"):
+            initial["numbering_scheme"] = "CNJ"
         form = ProceedingForm(initial=initial, use_required_attribute=False)
 
     context = {
@@ -112,7 +117,9 @@ def edit(request, id, proceeding_id):
     matter = get_object_or_404(Matter, pk=id)
     proceeding = Proceeding.objects.filter(matter=matter.id).order_by("-id").first()
 
-    proceeding_for_edits = get_object_or_404(Proceeding, pk=proceeding_id)
+    proceeding_for_edits = get_object_or_404(
+        Proceeding, pk=proceeding_id, matter_id=matter.id
+    )
 
     # if applicable, process any post data submitted by user
     if request.method == "POST":
@@ -152,6 +159,7 @@ def edit(request, id, proceeding_id):
 
 @login_required
 @matter_access_required
+@require_POST
 def set_primary(request, id, proceeding_id):
     proceeding = get_object_or_404(Proceeding, pk=proceeding_id, matter_id=id)
     proceeding.primary = True
@@ -162,8 +170,11 @@ def set_primary(request, id, proceeding_id):
 
 @login_required
 @matter_access_required
+@require_http_methods(["DELETE"])
 def delete(request, matter_id, proceeding_id):
-    proceeding = get_object_or_404(Proceeding, pk=proceeding_id)
+    proceeding = get_object_or_404(
+        Proceeding, pk=proceeding_id, matter_id=matter_id
+    )
     proceeding.delete()
 
     return HttpResponse(status=204, headers={"HX-Trigger": "matterProceedingChanged"})

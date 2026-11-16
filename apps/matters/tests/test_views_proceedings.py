@@ -49,7 +49,7 @@ def test_edit_post(client, matter, proceeding):
 
 
 def test_delete(client, matter, proceeding):
-    response = client.get(f"/matters/{matter.id}/proceedings/{proceeding.id}/delete")
+    response = client.delete(f"/matters/{matter.id}/proceedings/{proceeding.id}/delete")
     assert response.status_code == 204
     found = Proceeding.objects.filter(pk=proceeding.id).exists()
     assert not found

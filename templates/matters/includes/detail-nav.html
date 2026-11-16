@@ -1,3 +1,4 @@
+{% load i18n %}
 <nav id="detail-subnav"
      class="subnav"
      {% if oob %}hx-swap-oob="true"{% endif %}>
@@ -6,58 +7,58 @@
       <a href="{% url 'matters:overview-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='overview' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:overview-index' id=matter.id %}">Overview</a>
+         hx-push-url="{% url 'matters:overview-index' id=matter.id %}">{% trans "Overview" %}</a>
     </li>
     <li {% if subapp == 'contacts' %}class="active"{% endif %}>
       <a href="{% url 'matters:contacts' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='contacts' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:contacts' id=matter.id %}">Contacts</a>
+         hx-push-url="{% url 'matters:contacts' id=matter.id %}">{% trans "Contacts" %}</a>
     </li>
     {% if user.is_admin or user.perm_financial %}
       <li {% if subapp == 'rates' %}class="active"{% endif %}>
         <a href="{% url 'matters:rate-index' id=matter.id %}"
            hx-get="{% url 'matters:tab-content' id=matter.id tab='rates' %}"
            hx-target=".detail-body"
-           hx-push-url="{% url 'matters:rate-index' id=matter.id %}">Rates</a>
+           hx-push-url="{% url 'matters:rate-index' id=matter.id %}">{% trans "Rates" %}</a>
       </li>
     {% endif %}
     <li {% if subapp == 'activity' %}class="active"{% endif %}>
       <a href="{% url 'matters:activity-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='activity' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:activity-index' id=matter.id %}">Activity</a>
+         hx-push-url="{% url 'matters:activity-index' id=matter.id %}">{% trans "Activity" %}</a>
     </li>
     <li {% if subapp == 'events' %}class="active"{% endif %}>
       <a href="{% url 'matters:events-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='events' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:events-index' id=matter.id %}">Events</a>
+         hx-push-url="{% url 'matters:events-index' id=matter.id %}">{% trans "Events" %}</a>
     </li>
     <li {% if subapp == 'tasks' %}class="active"{% endif %}>
       <a href="{% url 'matters:tasks-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='tasks' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:tasks-index' id=matter.id %}">Tasks</a>
+         hx-push-url="{% url 'matters:tasks-index' id=matter.id %}">{% trans "Tasks" %}</a>
     </li>
     <li {% if subapp == 'proceedings' %}class="active"{% endif %}>
       <a href="{% url 'matters:proceedings-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='proceedings' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:proceedings-index' id=matter.id %}">Proceedings</a>
+         hx-push-url="{% url 'matters:proceedings-index' id=matter.id %}">{% trans "Proceedings" %}</a>
     </li>
     <li {% if subapp == 'settlement' %}class="active"{% endif %}>
       <a href="{% url 'matters:settlement-index' id=matter.id %}"
          hx-get="{% url 'matters:tab-content' id=matter.id tab='settlement' %}"
          hx-target=".detail-body"
-         hx-push-url="{% url 'matters:settlement-index' id=matter.id %}">Settlement</a>
+         hx-push-url="{% url 'matters:settlement-index' id=matter.id %}">{% trans "Settlement" %}</a>
     </li>
     {% if user.is_admin or user.perm_financial %}
       <li {% if subapp == 'ledger' %}class="active"{% endif %}>
         <a href="{% url 'matters:ledger' id=matter.id %}"
            hx-get="{% url 'matters:tab-content' id=matter.id tab='ledger' %}"
            hx-target=".detail-body"
-           hx-push-url="{% url 'matters:ledger' id=matter.id %}">Ledger</a>
+           hx-push-url="{% url 'matters:ledger' id=matter.id %}">{% trans "Ledger" %}</a>
       </li>
     {% endif %}
   </ul>

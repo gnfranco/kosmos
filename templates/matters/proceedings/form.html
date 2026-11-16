@@ -1,15 +1,16 @@
-<div class="modal-dialog modal-md">
+{% load i18n %}
+<div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
         {% if edit %}
-          Edit Proceeding
+          {% trans "Edit judicial proceeding" %}
         {% else %}
-          Add Proceeding
+          {% trans "Add judicial proceeding" %}
         {% endif %}
       </h1>
       <div>
-        <button type="button" @click="$dispatch('close-modal')">
+        <button type="button" @click="$dispatch('close-modal')" aria-label="{% trans 'Close' %}">
           <i class="icon-x"></i>
         </button>
       </div>
@@ -22,20 +23,22 @@
         {% csrf_token %}
         {{ form }}
       </form>
+      <p class="form-help">{% trans "CNJ numbers are checked using the official check-digit algorithm. Other or historical numbers remain supported." %}</p>
+      <p class="form-help">{% trans "Claim amounts in this section are explicitly in BRL, not converted from another currency." %}</p>
     </div>
     <div class="modal-footer">
       {% if edit %}
         <button type="button"
                 class="btn btn-danger"
-                hx-confirm='Are you sure you want to delete this record?'
+                hx-confirm="{% trans 'Are you sure you want to delete this proceeding?' %}"
                 hx-delete="{% url 'matters:proceedings-delete' matter_id=matter.id proceeding_id=proceeding_for_edits.id %}"
-                hx-target="#htmx-modal-container">Delete</button>
+                hx-target="#htmx-modal-container">{% trans "Delete" %}</button>
       {% else %}
         <button type="button"
                 class="btn btn-secondary"
-                @click="$dispatch('close-modal')">Cancel</button>
+                @click="$dispatch('close-modal')">{% trans "Cancel" %}</button>
       {% endif %}
-      <button type="submit" form="proceeding-form" class="btn btn-success">Submit</button>
+      <button type="submit" form="proceeding-form" class="btn btn-success">{% trans "Save" %}</button>
     </div>
   </div>
 </div>
