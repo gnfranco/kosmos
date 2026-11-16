@@ -15,6 +15,7 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.access import filter_matters_for_user
 from apps.activity.expenses.models import ExpenseEntry
@@ -62,7 +63,7 @@ def dash_wip_context(request):
     ctx = {
         "wip_show_all": wip_show_all,
         "wip_period": period,
-        "wip_period_label": dict(WIP_PERIODS).get(period, "All Dates"),
+        "wip_period_label": dict(WIP_PERIODS).get(period, _("All Dates")),
         "wip_periods": WIP_PERIODS,
         "wip_preview_user": preview_user,
         "user_rows": None,

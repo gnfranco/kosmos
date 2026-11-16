@@ -1,7 +1,10 @@
 {% load static %}
+{% load i18n %}
 {% load cache_buster %}
 {% load worker_health %}
 <!DOCTYPE html>
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}">
 <head>
   <meta charset="UTF-8" content="" />
   <title>Kosmos</title>
@@ -151,7 +154,7 @@
     <header class="mobile-topbar">
       <button class="sidebar-mobile-trigger"
               id="sidebar-mobile-trigger"
-              aria-label="Open navigation menu">
+              aria-label="{% trans "Open navigation menu" %}">
         <i class="icon-menu" aria-hidden="true"></i>
       </button>
       <a href="{% url 'tasks:index' %}"
@@ -220,3 +223,4 @@
   <script src="{% static_v 'js/file-upload-forms.js' %}" defer></script>
   <script src="{% static_v 'js/combobox.js' %}" defer></script>
 </body>
+</html>

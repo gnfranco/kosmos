@@ -1,22 +1,23 @@
 {% load humanize %}
+{% load i18n %}
 {% if wip_show_all %}
   <div x-data="wipDimensionToggle()">
     <div class="toolbar">
       <div class="toolbar-left">
-        <h2>Work in Progress</h2>
+        <h2>{% trans "Work in Progress" %}</h2>
       </div>
       <div class="toolbar-right">
         {% if user_rows %}
-          <div class="chart-toggle" role="group" aria-label="Group by">
+          <div class="chart-toggle" role="group" aria-label="{% trans "Group by" %}">
             <button type="button"
                     :class="{ 'toggle-active': dim === 'user' }"
                     @click="setDim('user')">
-              <span class="by-prefix">By&nbsp;</span>User
+              <span class="by-prefix">{% trans "By" %}&nbsp;</span>User
             </button>
             <button type="button"
                     :class="{ 'toggle-active': dim === 'matter' }"
                     @click="setDim('matter')">
-              <span class="by-prefix">By&nbsp;</span>Matter
+              <span class="by-prefix">{% trans "By" %}&nbsp;</span>Matter
             </button>
           </div>
         {% endif %}
@@ -28,18 +29,18 @@
         {% if user_rows %}
           <canvas id="wip-admin-chart" data-donut-data="wip-admin-matter-data"></canvas>
         {% else %}
-          <div class="wip-placeholder">No work in progress</div>
+          <div class="wip-placeholder">{% trans "No work in progress" %}</div>
         {% endif %}
       </div>
       <div class="table-container wip-table{% if not user_rows %} is-empty{% endif %}">
         <table class="table" x-cloak x-show="dim === 'user'">
           <thead>
             <tr>
-              <th>User</th>
-              <th class="numeric">Hours</th>
-              <th class="numeric">Gross</th>
-              <th class="numeric">Comp</th>
-              <th class="numeric">Net</th>
+              <th>{% trans "User" %}</th>
+              <th class="numeric">{% trans "Hours" %}</th>
+              <th class="numeric">{% trans "Gross" %}</th>
+              <th class="numeric">{% trans "Comp" %}</th>
+              <th class="numeric">{% trans "Net" %}</th>
             </tr>
           </thead>
           <tbody>
@@ -57,7 +58,7 @@
               </tr>
             {% empty %}
               <tr>
-                <td colspan="5" class="empty-entries">No work in progress.</td>
+                <td colspan="5" class="empty-entries">{% trans "No work in progress." %}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -65,7 +66,7 @@
             <tfoot>
               <tr class="table-total">
                 <td>
-                  <strong>Total</strong>
+                  <strong>{% trans "Total" %}</strong>
                 </td>
                 <td class="numeric">
                   <strong>{{ totals.hours|floatformat:1 }}h</strong>
@@ -86,11 +87,11 @@
         <table class="table" x-cloak x-show="dim === 'matter'">
           <thead>
             <tr>
-              <th>Matter</th>
-              <th class="numeric">Hours</th>
-              <th class="numeric">Gross</th>
-              <th class="numeric">Comp</th>
-              <th class="numeric">Net</th>
+              <th>{% trans "Matter" %}</th>
+              <th class="numeric">{% trans "Hours" %}</th>
+              <th class="numeric">{% trans "Gross" %}</th>
+              <th class="numeric">{% trans "Comp" %}</th>
+              <th class="numeric">{% trans "Net" %}</th>
             </tr>
           </thead>
           <tbody>
@@ -112,7 +113,7 @@
               </tr>
             {% empty %}
               <tr>
-                <td colspan="5" class="empty-entries">No work in progress.</td>
+                <td colspan="5" class="empty-entries">{% trans "No work in progress." %}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -120,7 +121,7 @@
             <tfoot>
               <tr class="table-total">
                 <td>
-                  <strong>Total</strong>
+                  <strong>{% trans "Total" %}</strong>
                 </td>
                 <td class="numeric">
                   <strong>{{ totals.hours|floatformat:1 }}h</strong>
@@ -152,7 +153,7 @@
 {% else %}
   <div class="toolbar">
     <div class="toolbar-left">
-      <h2>Work in Progress</h2>
+      <h2>{% trans "Work in Progress" %}</h2>
     </div>
     <div class="toolbar-right">{% include "dash/wip_period_dropdown.html" %}</div>
   </div>
@@ -161,18 +162,18 @@
       {% if user_self_matters %}
         <canvas id="wip-self-chart" data-donut-data="wip-self-data"></canvas>
       {% else %}
-        <div class="wip-placeholder">No work in progress</div>
+        <div class="wip-placeholder">{% trans "No work in progress" %}</div>
       {% endif %}
     </div>
     <div class="table-container wip-table{% if not user_self_matters %} is-empty{% endif %}">
       <table class="table">
         <thead>
           <tr>
-            <th>Matter</th>
-            <th class="numeric">Hours</th>
-            <th class="numeric">Gross</th>
-            <th class="numeric">Comp</th>
-            <th class="numeric">Net</th>
+            <th>{% trans "Matter" %}</th>
+            <th class="numeric">{% trans "Hours" %}</th>
+            <th class="numeric">{% trans "Gross" %}</th>
+            <th class="numeric">{% trans "Comp" %}</th>
+            <th class="numeric">{% trans "Net" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -194,7 +195,7 @@
             </tr>
           {% empty %}
             <tr>
-              <td colspan="5" class="empty-entries">No work in progress.</td>
+              <td colspan="5" class="empty-entries">{% trans "No work in progress." %}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -202,7 +203,7 @@
           <tfoot>
             <tr class="table-total">
               <td>
-                <strong>Total</strong>
+                <strong>{% trans "Total" %}</strong>
               </td>
               <td class="numeric">
                 <strong>{{ totals.hours|floatformat:1 }}h</strong>

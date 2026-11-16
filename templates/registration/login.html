@@ -1,13 +1,14 @@
 {% extends "registration/base.html" %}
 {% load firm_tags %}
+{% load i18n %}
 {% block title %}
-  Log In
+  {% trans "Log In" %}
 {% endblock title %}
 {% block content %}
   <div class="auth-container">
     <div class="auth-card">
       {% auth_brand %}
-      <div class="auth-subtitle">Log in to your account</div>
+      <div class="auth-subtitle">{% trans "Log in to your account" %}</div>
       {% if error %}<div class="auth-error">{{ error }}</div>{% endif %}
       <form id="login-form" class="account-form" method="post">
         {% csrf_token %}
@@ -23,7 +24,7 @@
             {{ form.password }}
             <button type="button"
                     class="password-toggle"
-                    aria-label="Show password"
+                    aria-label="{% trans "Show password" %}" data-label-show="{% trans "Show password" %}" data-label-hide="{% trans "Hide password" %}"
                     aria-pressed="false">
               <i class="icon-eye" aria-hidden="true"></i>
             </button>
@@ -31,8 +32,8 @@
           {{ form.password.errors }}
         </p>
         <div class="auth-buttons justify-between">
-          <a href="{% url 'accounts:password_reset' %}">Forgot Password?</a>
-          <button type="submit" class="btn btn-success">Submit</button>
+          <a href="{% url 'accounts:password_reset' %}">{% trans "Forgot Password?" %}</a>
+          <button type="submit" class="btn btn-success">{% trans "Log In" %}</button>
         </div>
       </form>
     </div>

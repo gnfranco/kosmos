@@ -1,6 +1,9 @@
 {% load static %}
+{% load i18n %}
 {% load cache_buster %}
 <!DOCTYPE html>
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="{{ CURRENT_LANGUAGE }}">
 <head>
   <meta charset="UTF-8" content="" />
   <title>
@@ -87,3 +90,4 @@
   <script src="{% static_v 'js/file-upload-forms.js' %}" defer></script>
   <script src="{% static_v 'js/theme.js' %}"></script>
 </body>
+</html>

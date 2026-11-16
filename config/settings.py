@@ -241,7 +241,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = env("LANGUAGE_CODE", default="en-us")
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # The firm's time zone: dates shown in the app, schedule times and the
 # times in the invitations Kosmos sends.
