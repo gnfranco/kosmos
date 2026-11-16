@@ -56,11 +56,11 @@ A licença upstream é AGPL-3.0. Revisar obrigações de disponibilização do c
 - Bootstrap de DB e extensões concluído: `ops/linvora-lex/bootstrap-db.sh`.
 - Django inicializado: `ops/linvora-lex/init-app.sh`; migrações, busca, agendamentos e estáticos OK.
 - Serviço web e worker em execução, com `MemoryMax`, via `ops/linvora-lex/install-services.sh`.
-- Caddy 2.6.2: `basicauth` ativo, TLS público válido e `lex.linvora.com.br` em DNS.
-- Admin de teste criado via `ops/linvora-lex/bootstrap-admin.sh`; SMTP local do Hetzner aceitou e-mail de teste (a entrega à caixa do destinatário deve ser conferida).
-- Verificação: `/health/live/`, `/health/ready/`, `/health/worker/` e `/accounts/login/` responderam 200 pela porta interna; endereço público responde 401 sem autenticação básica, como esperado.
+- Caddy 2.6.2: HTTPS automático válido, HTTP -> HTTPS, HSTS curto (24h), sem Basic Auth; login Django com 2FA. Endpoints técnicos `/health/*`, `/mcp*` e `/.well-known/*` inacessíveis publicamente.
+- Admin de teste criado via `ops/linvora-lex/bootstrap-admin.sh`; SMTP local do Hetzner enviou e-mail de teste e a mensagem foi encontrada no Gmail.
+- Verificação: `/health/live/`, `/health/ready/`, `/health/worker/` e `/accounts/login/` retornaram HTTP 200 localmente. Externamente, login HTTP 200, técnicos HTTP 404, TLS válido, HTTP HTTP 308 para HTTPS e estáticos HTTP 200.
 - Os serviços anteriores `escritorio-ops`, `linvora-odoo20-shared`, `postgresql@16-main` e `caddy` permanecem ativos.
-- `manage.py check --deploy` apontou três avisos herdados do upstream: HSTS não definido, redirect SSL gerenciado pelo Caddy, e X-Frame-Options SAMEORIGIN. Revisar antes de liberar dados reais.
+- Django hospedado com `DEBUG=False`, `ENV=prod`, `TIME_ZONE=America/Sao_Paulo`, notificações de e-mail desativadas no piloto. `check --deploy` ainda aponta recomendações de HSTS e redirect gerenciados no Caddy e X-Frame-Options SAMEORIGIN; revisar antes de liberar dados reais.
 
 ### Primeiro acesso (não versionar senhas)
 
@@ -74,4 +74,6 @@ Utilizar somente `DJANGO_ADMIN_EMAIL` e `DJANGO_ADMIN_PASSWORD` do arquivo; os v
 
 ### Próximos testes
 
-Homologar navegação, permissões de usuários, agenda e casos, OCR, financeiro, envio real de e-mails, exportação de dados e backup/restauração. Permanecer com dados fictícios até validação.
+Backup local inicial criado por `ops/linvora-lex/backup-lex.sh`: PostgreSQL custom dump e `media/` em `/srv/kosmos-lex/backups/`, acessíveis apenas ao root. **Restauração de teste concluída com sucesso** em banco temporário, com 404 migrações, e o banco temporário foi excluído. Ainda faltam cópia offsite, agendamento de backups, controle de retenção e teste completo de recuperação operacional.
+
+Homologar navegação, permissões de usuários, agenda e casos, OCR, financeiro, exportação de dados e backup/restauração integral. Permanecer com dados fictícios até validação.
