@@ -49,3 +49,29 @@ git merge upstream/dev
 Para operação: `systemctl status kosmos-lex kosmos-lex-worker`, `journalctl -u kosmos-lex -n 80`, `curl -I http://127.0.0.1:18085`.
 
 A licença upstream é AGPL-3.0. Revisar obrigações de disponibilização do código ao distribuir/modificar aplicação acessível pela rede.
+
+## Estado verificado — 16/11/2026
+
+- Fork próprio com `origin` e `upstream`; deploy na branch `linvora/hetzner-lex`.
+- Bootstrap de DB e extensões concluído: `ops/linvora-lex/bootstrap-db.sh`.
+- Django inicializado: `ops/linvora-lex/init-app.sh`; migrações, busca, agendamentos e estáticos OK.
+- Serviço web e worker em execução, com `MemoryMax`, via `ops/linvora-lex/install-services.sh`.
+- Caddy 2.6.2: `basicauth` ativo, TLS público válido e `lex.linvora.com.br` em DNS.
+- Admin de teste criado via `ops/linvora-lex/bootstrap-admin.sh`; SMTP local do Hetzner aceitou e-mail de teste (a entrega à caixa do destinatário deve ser conferida).
+- Verificação: `/health/live/`, `/health/ready/`, `/health/worker/` e `/accounts/login/` responderam 200 pela porta interna; endereço público responde 401 sem autenticação básica, como esperado.
+- Os serviços anteriores `escritorio-ops`, `linvora-odoo20-shared`, `postgresql@16-main` e `caddy` permanecem ativos.
+- `manage.py check --deploy` apontou três avisos herdados do upstream: HSTS não definido, redirect SSL gerenciado pelo Caddy, e X-Frame-Options SAMEORIGIN. Revisar antes de liberar dados reais.
+
+### Primeiro acesso (não versionar senhas)
+
+No **Orion**, com acesso à VPN Hetzner:
+
+```bash
+ssh -i ~/.ssh/hetzner_linvora_ed25519 root@10.77.0.1 'cat /root/kosmos-lex-access.txt'
+```
+
+A saída mostra o usuário/senha da proteção do Caddy e o e-mail/senha do administrador Django. O login Django exige um segundo fator enviado ao e-mail cadastrado. O arquivo de credenciais reside exclusivamente no Hetzner, com permissão 0600.
+
+### Próximos testes
+
+Homologar navegação, permissões de usuários, agenda e casos, OCR, financeiro, envio real de e-mails, exportação de dados e backup/restauração. Permanecer com dados fictícios até validação.
