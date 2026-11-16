@@ -6,6 +6,7 @@ matter."""
 
 import pytest
 from django.urls import reverse
+from django.utils.translation import gettext
 
 from apps.contacts.models import Contact
 from apps.matters.forms import MatterForm
@@ -136,11 +137,11 @@ def test_edit_refuses_anyone_outside_the_client_group(
 
 def test_overview_names_the_billing_contacts(client, matter, jeremy, greg):
     url = f"/matters/{matter.id}/overview"
-    assert "Additional Billing Contacts" not in client.get(url).content.decode()
+    assert gettext("Additional Billing Contacts") not in client.get(url).content.decode()
 
     matter.billing_contacts.set([jeremy, greg])
     page = client.get(url).content.decode()
-    assert "Additional Billing Contacts" in page
+    assert gettext("Additional Billing Contacts") in page
     assert page.index("Greg Horner") < page.index("Jeremy Henderson")
 
 
