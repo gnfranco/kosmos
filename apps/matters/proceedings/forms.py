@@ -1,4 +1,8 @@
+"""Proceeding form with an optional CNJ validator and BRL-only claim fields."""
+import re
+
 from django import forms
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from apps.matters.proceedings.cnj import normalize_cnj
@@ -7,7 +11,37 @@ from config.helpers import YESNO_CHOICES
 from config.settings import CustomFormRendererCompact
 
 
+_BR_AMOUNT = re.compile(
+    r"^(?:[0-9]+|[0-9]{1,3}(?:\.[0-9]{3})+)(?:,[0-9]{1,2})?$"
+)
+
+
+class BRLAmountField(forms.DecimalField):
+    """Accept 12500,50 and 12.500,50 in pt-BR without losing centavos."""
+
+    def to_python(self, value):
+        if isinstance(value, str) and "," in value and (
+            translation.get_language() or ""
+        ).lower().startswith("pt"):
+            value = value.strip()
+            if not _BR_AMOUNT.fullmatch(value):
+                raise forms.ValidationError(_("Enter a valid amount in BRL."))
+            value = value.replace(".", "").replace(",", ".")
+        return super().to_python(value)
+
+
 class ProceedingForm(forms.ModelForm):
+    claim_amount_brl = BRLAmountField(
+        required=False, min_value=0, max_digits=15, decimal_places=2,
+        localize=True, label=_("Initial claim value (BRL)"),
+        widget=forms.TextInput(attrs={"inputmode": "decimal"}),
+    )
+    claim_updated_brl = BRLAmountField(
+        required=False, min_value=0, max_digits=15, decimal_places=2,
+        localize=True, label=_("Updated claim value (BRL)"),
+        widget=forms.TextInput(attrs={"inputmode": "decimal"}),
+    )
+
     class Meta:
         model = Proceeding
         fields = (
@@ -52,8 +86,6 @@ class ProceedingForm(forms.ModelForm):
             "nickname": _("Short name"),
             "status": _("Status"),
             "primary": _("Primary proceeding"),
-            "claim_amount_brl": _("Initial claim value (BRL)"),
-            "claim_updated_brl": _("Updated claim value (BRL)"),
             "date_final_judgment": _("Final judgment date"),
             "case_url": _("Court case URL"),
         }
@@ -61,9 +93,6 @@ class ProceedingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.renderer = CustomFormRendererCompact()
-        for name in ("claim_amount_brl", "claim_updated_brl"):
-            self.fields[name].localize = True
-            self.fields[name].widget.is_localized = True
 
     def clean_case_number(self):
         value = (self.cleaned_data.get("case_number") or "").strip()

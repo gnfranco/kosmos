@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kosmos Lex — Linvora pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 16:36-0300\n"
+"POT-Creation-Date: 2026-11-16 16:46-0300\n"
 "PO-Revision-Date: 2026-11-16 16:30-0300\n"
 "Last-Translator: Linvora\n"
 "Language-Team: Linvora\n"
@@ -89,6 +89,15 @@ msgstr "O segmento da Justiça no número CNJ deve estar entre 1 e 9."
 msgid "Invalid CNJ check digits."
 msgstr "Dígitos verificadores do número CNJ inválidos."
 
+msgid "Enter a valid amount in BRL."
+msgstr "Informe um valor válido em reais."
+
+msgid "Initial claim value (BRL)"
+msgstr "Valor inicial da causa (R$)"
+
+msgid "Updated claim value (BRL)"
+msgstr "Valor atualizado da causa (R$)"
+
 msgid "Main, appeal, enforcement, etc."
 msgstr "Principal, recurso, execução etc."
 
@@ -121,12 +130,6 @@ msgstr "Situação"
 
 msgid "Primary proceeding"
 msgstr "Processo principal"
-
-msgid "Initial claim value (BRL)"
-msgstr "Valor inicial da causa (R$)"
-
-msgid "Updated claim value (BRL)"
-msgstr "Valor atualizado da causa (R$)"
 
 msgid "Final judgment date"
 msgstr "Data do trânsito em julgado"

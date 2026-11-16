@@ -17,7 +17,7 @@ from apps.reports.wip.aggregation import WIP_PERIODS
 class BrazilianPortugueseLocaleTests(SimpleTestCase):
     def test_pt_br_catalog_and_dashboard_period_labels(self):
         with translation.override("pt-br"):
-            self.assertEqual(gettext("Matters"), "Processos")
+            self.assertEqual(gettext("Matters"), "Casos")
             self.assertEqual(gettext("Work in Progress"), "Horas a faturar")
             self.assertEqual(gettext("Invalid verification code."), "Código de verificação inválido.")
             self.assertEqual(str(dict(WIP_PERIODS)["this_month"]), "Este mês")
