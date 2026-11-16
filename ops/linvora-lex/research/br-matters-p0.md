@@ -55,3 +55,28 @@ automaticamente: pode haver formulários de intake e casos legados que ainda
 dependam delas. O financeiro norte-americano, cadastro CPF/CNPJ, fluxos
 trabalhistas/previdenciários específicos e integração Escritório ON permanecem
 em sprints posteriores.
+
+## Complemento L1 — limpeza administrativa opcional (16/11/2026)
+
+A migração 0059 já cria onze áreas brasileiras e **não deve ser repetida**
+nem modificada. O comando complementar
+`python manage.py seed_br_practice_areas` adiciona apenas as especialidades
+ainda ausentes e mantém as categorias criadas anteriormente.
+
+Para facilitar o primeiro piloto brasileiro, o administrador pode optar por
+desativar apenas os nomes de áreas americanas que vieram das migrations
+0023 e 0048, desde que nenhum `Matter` nem `Intake` os referencie:
+
+```bash
+python manage.py seed_br_practice_areas --deactivate-unused-legacy --dry-run
+# Após revisão do relatório:
+python manage.py seed_br_practice_areas --deactivate-unused-legacy
+```
+
+O comando exige `LANGUAGE_CODE=pt-br`, é transacional, não exclui registros,
+não altera nomes/IDs nem reativa áreas previamente desativadas pelo usuário,
+e preserva todas as áreas personalizadas. Qualquer área inativa pode ser
+reativada em Configurações > Áreas de atuação.
+
+**Ressalva:** integrações externas de intake que ainda enviem categorias
+americanas devem ser revisadas antes de desativar essas opções.
