@@ -1,16 +1,17 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 
 
 class EmailLoginForm(forms.Form):
     email = forms.EmailField(
-        label="Email",
+        label=_("Email"),
         widget=forms.EmailInput(attrs={"autofocus": True, "autocomplete": "email"}),
     )
     password = forms.CharField(
-        label="Password",
+        label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
     )
@@ -51,7 +52,7 @@ class UniqueEmailMixin:
         if self.instance and self.instance.pk:
             taken = taken.exclude(pk=self.instance.pk)
         if taken.exists():
-            raise forms.ValidationError("Another user signs in with this email.")
+            raise forms.ValidationError(_("Another user signs in with this email."))
         return email
 
 

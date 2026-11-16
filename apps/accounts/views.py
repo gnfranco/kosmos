@@ -7,6 +7,7 @@ from django.db.models import F
 from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.translation import gettext as _, ngettext
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 from django.views.decorators.http import require_GET
@@ -38,11 +39,11 @@ def cooldown_message(until):
     """What to tell a user whose address is in a cooldown."""
     seconds = max(1, math.ceil((until - timezone.now()).total_seconds()))
     if seconds < 60:
-        wait = f"{seconds} second{'s' if seconds != 1 else ''}"
+        wait = ngettext("%(count)d second", "%(count)d seconds", seconds) % {"count": seconds}
     else:
         minutes = math.ceil(seconds / 60)
-        wait = f"{minutes} minute{'s' if minutes != 1 else ''}"
-    return f"Too many failed sign-ins. Try again in {wait}."
+        wait = ngettext("%(count)d minute", "%(count)d minutes", minutes) % {"count": minutes}
+    return _("Too many failed sign-ins. Try again in %(wait)s.") % {"wait": wait}
 
 
 class LoginView(View):
@@ -82,7 +83,7 @@ class LoginView(View):
         )
         if user is None:
             SignInThrottle.record_failure(email)
-            context["error"] = "The email address or password is not right."
+            context["error"] = _("The email address or password is not right.")
             return render(request, self.template_name, context)
 
         # The cooldown is cleared only when the second step passes: the
@@ -151,12 +152,12 @@ class VerifyCodeView(View):
             if user is None or verification is None:
                 # The code was used, or discarded after too many wrong tries.
                 _abandon_login(request)
-                return self._error(request, form, "Please log in again.")
+                return self._error(request, form, _("Please log in again."))
 
             if verification.is_expired():
                 verification.delete()
                 return self._error(
-                    request, form, "Code has expired. Please log in again."
+                    request, form, _("Code has expired. Please log in again.")
                 )
 
             if not hmac.compare_digest(code.encode(), verification.code.encode()):
@@ -171,9 +172,9 @@ class VerifyCodeView(View):
                     verification.delete()
                     _abandon_login(request)
                     return self._error(
-                        request, form, "Too many incorrect codes. Please log in again."
+                        request, form, _("Too many incorrect codes. Please log in again.")
                     )
-                return self._error(request, form, "Invalid verification code.")
+                return self._error(request, form, _("Invalid verification code."))
 
             # Success - clean up and log in
             verification.delete()
@@ -221,7 +222,7 @@ class AuthenticatorCodeView(View):
         if not totp.verify(authenticator, form.cleaned_data["code"]):
             SignInThrottle.record_failure(email)
             until = SignInThrottle.locked_until(email)
-            message = cooldown_message(until) if until else "That code is not right."
+            message = cooldown_message(until) if until else _("That code is not right.")
             return self._error(request, form, message)
 
         return _finish_login(request, user)
