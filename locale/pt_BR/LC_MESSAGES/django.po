@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kosmos Lex — Linvora pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 16:59-0300\n"
+"POT-Creation-Date: 2026-11-16 18:39-0300\n"
 "PO-Revision-Date: 2026-11-16 16:30-0300\n"
 "Last-Translator: Linvora\n"
 "Language-Team: Linvora\n"
@@ -77,8 +77,86 @@ msgstr "Muitos códigos incorretos. Entre novamente na sua conta."
 msgid "That code is not right."
 msgstr "Código incorreto."
 
+msgid "Upcoming Events"
+msgstr "Próximos compromissos"
+
 msgid "All Dates"
 msgstr "Todas as datas"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "copied"
+msgstr "copiados"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No (Administrative)"
+msgstr "Não (administrativo)"
+
+msgid "Client"
+msgstr "Cliente"
+
+msgid "Status"
+msgstr "Situação"
+
+msgid "Matter Name"
+msgstr "Nome do caso"
+
+msgid "Open Date"
+msgstr "Data de abertura"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Work Status"
+msgstr "Situação do trabalho"
+
+msgid "Jurisdiction"
+msgstr "Jurisdição"
+
+msgid "Billable"
+msgstr "Faturável"
+
+msgid "Clio Matter"
+msgstr "Caso do Clio"
+
+msgid "Client Reference"
+msgstr "Referência do cliente"
+
+msgid "Practice Area"
+msgstr "Área de atuação"
+
+msgid "Additional Billing Contacts"
+msgstr "Contatos adicionais de cobrança"
+
+msgid "Billing Type"
+msgstr "Tipo de cobrança"
+
+msgid "Flat Fee Amount"
+msgstr "Valor dos honorários fixos"
+
+msgid "Deferred Fee Arrangement"
+msgstr "Honorários diferidos"
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "Open"
+msgstr "Em andamento"
+
+msgid "Complete"
+msgstr "Concluído"
+
+msgid "Closed"
+msgstr "Encerrado"
+
+msgid "Hourly"
+msgstr "Por hora"
+
+msgid "Flat Fee"
+msgstr "Valor fixo"
 
 msgid "Enter a valid CNJ number with 20 digits."
 msgstr "Informe um número CNJ válido com 20 dígitos."
@@ -125,9 +203,6 @@ msgstr "Vara judicial"
 msgid "Short name"
 msgstr "Nome resumido"
 
-msgid "Status"
-msgstr "Situação"
-
 msgid "Primary proceeding"
 msgstr "Processo principal"
 
@@ -161,6 +236,12 @@ msgstr "Semana passada"
 msgid "This Month"
 msgstr "Este mês"
 
+msgid "Name"
+msgstr "Nome"
+
+msgid "Active"
+msgstr "Ativa"
+
 msgid "Open navigation menu"
 msgstr "Abrir menu de navegação"
 
@@ -181,9 +262,6 @@ msgstr "Saldo fiduciário baixo (pendente)"
 
 msgid "No matters with low trust available"
 msgstr "Nenhum processo com saldo fiduciário baixo"
-
-msgid "Upcoming Events"
-msgstr "Próximos compromissos"
 
 msgid "Calendar"
 msgstr "Agenda"
@@ -248,8 +326,8 @@ msgstr "Excluir"
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "Submit"
-msgstr "Enviar"
+msgid "Save"
+msgstr "Salvar"
 
 msgid "Overview"
 msgstr "Visão geral"
@@ -281,23 +359,11 @@ msgstr "Movimentações financeiras"
 msgid "Filter"
 msgstr "Filtrar"
 
-msgid "Pending"
-msgstr "Pendente"
-
-msgid "Open"
-msgstr "Em andamento"
-
-msgid "Complete"
-msgstr "Concluído"
-
 msgid "Filter list..."
 msgstr "Filtrar lista..."
 
 msgid "Count"
 msgstr "Quantidade"
-
-msgid "Work Status"
-msgstr "Situação do trabalho"
 
 msgid "Proceeding"
 msgstr "Processo judicial"
@@ -307,36 +373,6 @@ msgstr "Nenhum caso encontrado."
 
 msgid "Matter Detail"
 msgstr "Detalhes do caso"
-
-msgid "Client"
-msgstr "Cliente"
-
-msgid "None"
-msgstr "Nenhum"
-
-msgid "Additional Billing Contacts"
-msgstr "Contatos adicionais de cobrança"
-
-msgid "Practice Area"
-msgstr "Área de atuação"
-
-msgid "Description"
-msgstr "Descrição"
-
-msgid "Open Date"
-msgstr "Data de abertura"
-
-msgid "Closed"
-msgstr "Encerrado"
-
-msgid "Jurisdiction"
-msgstr "Jurisdição"
-
-msgid "Billing Type"
-msgstr "Tipo de cobrança"
-
-msgid "Billable"
-msgstr "Faturável"
 
 msgid "Reference No."
 msgstr "Número de referência"
@@ -385,9 +421,6 @@ msgstr ""
 msgid "Are you sure you want to delete this proceeding?"
 msgstr "Tem certeza de que deseja excluir este processo judicial?"
 
-msgid "Save"
-msgstr "Salvar"
-
 msgid "Primary"
 msgstr "Principal"
 
@@ -417,6 +450,13 @@ msgstr "Copiar número do processo"
 
 msgid "View Proceedings"
 msgstr "Ver processos judiciais"
+
+msgid "Search contacts..."
+msgstr "Buscar contatos..."
+
+#| msgid "Collections"
+msgid "Clear selection"
+msgstr "Limpar seleção"
 
 msgid "Log In"
 msgstr "Entrar"
@@ -453,6 +493,9 @@ msgstr "Informe a nova senha"
 
 msgid "Set a new password"
 msgstr "Definir nova senha"
+
+msgid "Submit"
+msgstr "Enviar"
 
 msgid ""
 "This password reset link is invalid or has already been used. Please request"
@@ -499,6 +542,27 @@ msgstr "Verificar código"
 msgid "Enter the verification code sent to your email."
 msgstr "Digite o código de verificação enviado ao seu e-mail."
 
+msgid "Edit Practice Area"
+msgstr "Editar área de atuação"
+
+msgid "Add Practice Area"
+msgstr "Adicionar área de atuação"
+
+msgid "Practice Areas"
+msgstr "Áreas de atuação"
+
+msgid "Inactive"
+msgstr "Inativa"
+
+msgid "All"
+msgstr "Todas"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "No practice areas found."
+msgstr "Nenhuma área de atuação encontrada."
+
 msgid "Dash"
 msgstr "Painel"
 
@@ -534,61 +598,3 @@ msgstr "Sair"
 
 msgid "Toggle sidebar"
 msgstr "Expandir ou recolher menu lateral"
-
-
-msgid "Add Practice Area"
-msgstr "Adicionar área de atuação"
-
-msgid "Active"
-msgstr "Ativa"
-
-msgid "Hourly"
-msgstr "Por hora"
-
-msgid "No practice areas found."
-msgstr "Nenhuma área de atuação encontrada."
-
-msgid "Client Reference"
-msgstr "Referência do cliente"
-
-msgid "Yes"
-msgstr "Sim"
-
-msgid "copied"
-msgstr "copiados"
-
-msgid "Inactive"
-msgstr "Inativa"
-
-msgid "Name"
-msgstr "Nome"
-
-msgid "Clio Matter"
-msgstr "Caso do Clio"
-
-msgid "All"
-msgstr "Todas"
-
-msgid "Matter Name"
-msgstr "Nome do caso"
-
-msgid "No (Administrative)"
-msgstr "Não (administrativo)"
-
-msgid "Deferred Fee Arrangement"
-msgstr "Honorários diferidos"
-
-msgid "Edit"
-msgstr "Editar"
-
-msgid "Edit Practice Area"
-msgstr "Editar área de atuação"
-
-msgid "Flat Fee Amount"
-msgstr "Valor dos honorários fixos"
-
-msgid "Flat Fee"
-msgstr "Valor fixo"
-
-msgid "Practice Areas"
-msgstr "Áreas de atuação"
