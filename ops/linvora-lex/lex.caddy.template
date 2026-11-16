@@ -7,14 +7,16 @@ lex.linvora.com.br {
         X-Content-Type-Options "nosniff"
         Referrer-Policy "strict-origin-when-cross-origin"
     }
-    @internal_only path /health/* /mcp /mcp/* /.well-known/* /admin /admin/*
-    respond @internal_only 404
-    @static path /static/*
-    handle @static {
-        root * /srv/kosmos-lex/app
-        file_server
-    }
-    handle {
-        reverse_proxy 127.0.0.1:18085
+    route {
+        @internal_only path /health/* /mcp /mcp/* /.well-known/* /admin /admin/*
+        respond @internal_only 404
+        @static path /static/*
+        handle @static {
+            root * /srv/kosmos-lex/app
+            file_server
+        }
+        handle {
+            reverse_proxy 127.0.0.1:18085
+        }
     }
 }
