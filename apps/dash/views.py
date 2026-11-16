@@ -77,7 +77,7 @@ def dash_wip_context(request):
         ctx["user_rows"], ctx["user_donut"], totals = wip_user_breakdown(
             date_min=date_min, date_max=date_max
         )
-        ctx["matter_rows"], ctx["matter_donut"], _ = wip_matter_breakdown(
+        ctx["matter_rows"], ctx["matter_donut"], _matter_totals = wip_matter_breakdown(
             top_n=5, date_min=date_min, date_max=date_max
         )
     else:
