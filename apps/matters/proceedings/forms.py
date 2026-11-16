@@ -110,6 +110,28 @@ class ProceedingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.renderer = CustomFormRendererCompact()
+        # Older clients and automation scripts may still submit the pre-BR
+        # proceeding form. Preserve the instance's numbering scheme and
+        # Brazilian metadata when these fields are absent, not when the user
+        # deliberately clears them in the new form.
+        if self.is_bound and "numbering_scheme" not in self.data:
+            data = self.data.copy()
+            data["numbering_scheme"] = (
+                self.instance.numbering_scheme or "OTHER"
+            )
+            if self.instance.pk:
+                for field_name in (
+                    "case_class", "court_division", "claim_amount_brl",
+                    "claim_updated_brl", "date_final_judgment", "case_url",
+                ):
+                    if field_name not in data:
+                        value = getattr(self.instance, field_name)
+                        if value is not None:
+                            data[field_name] = (
+                                value.isoformat() if hasattr(value, "isoformat")
+                                else str(value)
+                            )
+            self.data = data
 
     def clean_case_number(self):
         value = (self.cleaned_data.get("case_number") or "").strip()

@@ -158,6 +158,37 @@ class BrazilianProceedingPersistenceTests(TestCase):
         self.assertEqual(obj.date_final_judgment.isoformat(), "2026-02-01")
         self.assertEqual(obj.history.first().case_class, "Reclamação Trabalhista")
 
+    def test_legacy_edit_does_not_erase_brazilian_metadata(self):
+        obj = Proceeding.objects.create(
+            matter=self.matter_a,
+            user=self.user,
+            case_number=VALID_CNJ,
+            numbering_scheme="CNJ",
+            case_class="Reclamação Trabalhista",
+            court_division="2ª Vara do Trabalho",
+            claim_amount_brl=Decimal("12500.50"),
+            claim_updated_brl=Decimal("18000.00"),
+            case_url="https://www.trt3.jus.br/",
+        )
+        form = ProceedingForm(
+            data={
+                "case_number": VALID_CNJ,
+                "forum": "TRT 3",
+                "date_filed": "2025-03-01",
+                "status": "Ongoing",
+            },
+            instance=obj,
+        )
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        form.save()
+        obj.refresh_from_db()
+        self.assertEqual(obj.numbering_scheme, "CNJ")
+        self.assertEqual(obj.case_class, "Reclamação Trabalhista")
+        self.assertEqual(obj.court_division, "2ª Vara do Trabalho")
+        self.assertEqual(obj.claim_amount_brl, Decimal("12500.50"))
+        self.assertEqual(obj.claim_updated_brl, Decimal("18000.00"))
+        self.assertEqual(obj.case_url, "https://www.trt3.jus.br/")
+
     def test_one_case_can_have_several_judicial_proceedings(self):
         for num in ("20CV141360", "20CV141361"):
             Proceeding.objects.create(
