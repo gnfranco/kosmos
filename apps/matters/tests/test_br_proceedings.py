@@ -66,6 +66,26 @@ class CnjValidationTests(SimpleTestCase):
             self.assertIsNotNone(get_template("matters/proceedings/list.html"))
             self.assertIsNotNone(get_template("matters/proceedings/form.html"))
 
+    def test_brazilian_decimal_input_preserves_cents(self):
+        with translation.override("pt-br"):
+            form = ProceedingForm(data={
+                "numbering_scheme": "CNJ",
+                "case_number": VALID_CNJ,
+                "date_filed": "2025-03-01",
+                "forum": "TRF 3",
+                "status": "Ongoing",
+                "primary": "True",
+                "claim_amount_brl": "12.500,50",
+                "claim_updated_brl": "13.000,75",
+            })
+            self.assertTrue(form.is_valid(), form.errors.as_text())
+            self.assertEqual(
+                form.cleaned_data["claim_amount_brl"], Decimal("12500.50")
+            )
+            self.assertEqual(
+                form.cleaned_data["claim_updated_brl"], Decimal("13000.75")
+            )
+
 
 class BrazilianProceedingPersistenceTests(TestCase):
     def setUp(self):
