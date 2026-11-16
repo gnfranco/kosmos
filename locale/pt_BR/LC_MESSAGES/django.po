@@ -3,7 +3,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kosmos Lex — Linvora pt_BR\n"
-"PO-Revision-Date: 2026-11-16 15:47-0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-16 16:59-0300\n"
+"PO-Revision-Date: 2026-11-16 16:30-0300\n"
 "Last-Translator: Linvora\n"
 "Language-Team: Linvora\n"
 "Language: pt_BR\n"
@@ -20,6 +22,15 @@ msgstr "Senha"
 
 msgid "Another user signs in with this email."
 msgstr "Outro usuário já utiliza este e-mail para acessar o sistema."
+
+msgid "Matters"
+msgstr "Casos"
+
+msgid "Work in Progress"
+msgstr "Horas a faturar"
+
+msgid "Invalid verification code."
+msgstr "Código de verificação inválido."
 
 msgid "Your Login Verification Code"
 msgstr "Seu código de verificação de acesso"
@@ -63,14 +74,77 @@ msgstr "O código expirou. Entre novamente na sua conta."
 msgid "Too many incorrect codes. Please log in again."
 msgstr "Muitos códigos incorretos. Entre novamente na sua conta."
 
-msgid "Invalid verification code."
-msgstr "Código de verificação inválido."
-
 msgid "That code is not right."
 msgstr "Código incorreto."
 
 msgid "All Dates"
 msgstr "Todas as datas"
+
+msgid "Enter a valid CNJ number with 20 digits."
+msgstr "Informe um número CNJ válido com 20 dígitos."
+
+msgid "CNJ judicial segment must be between 1 and 9."
+msgstr "O segmento da Justiça no número CNJ deve estar entre 1 e 9."
+
+msgid "Invalid CNJ check digits."
+msgstr "Dígitos verificadores do número CNJ inválidos."
+
+msgid "Enter a valid amount in BRL."
+msgstr "Informe um valor válido em reais."
+
+msgid "Initial claim value (BRL)"
+msgstr "Valor inicial da causa (R$)"
+
+msgid "Updated claim value (BRL)"
+msgstr "Valor atualizado da causa (R$)"
+
+msgid "Main, appeal, enforcement, etc."
+msgstr "Principal, recurso, execução etc."
+
+msgid "NNNNNNN-DD.AAAA.J.TR.OOOO"
+msgstr "NNNNNNN-DD.AAAA.J.TR.OOOO"
+
+msgid "Numbering scheme"
+msgstr "Tipo de numeração"
+
+msgid "Case number"
+msgstr "Número do processo"
+
+msgid "Date filed / distribution"
+msgstr "Data da distribuição"
+
+msgid "Procedural class"
+msgstr "Classe processual"
+
+msgid "Court / tribunal"
+msgstr "Tribunal / foro"
+
+msgid "Judicial division (vara)"
+msgstr "Vara judicial"
+
+msgid "Short name"
+msgstr "Nome resumido"
+
+msgid "Status"
+msgstr "Situação"
+
+msgid "Primary proceeding"
+msgstr "Processo principal"
+
+msgid "Final judgment date"
+msgstr "Data do trânsito em julgado"
+
+msgid "Court case URL"
+msgstr "Link do processo no tribunal"
+
+msgid "A CNJ number is required."
+msgstr "O número CNJ é obrigatório."
+
+msgid "Other / legacy number"
+msgstr "Outro formato / número antigo"
+
+msgid "CNJ (Brazil)"
+msgstr "CNJ (Brasil)"
 
 msgid "Today"
 msgstr "Hoje"
@@ -123,9 +197,6 @@ msgstr "Dia inteiro"
 msgid "to"
 msgstr "até"
 
-msgid "Work in Progress"
-msgstr "Horas a faturar"
-
 msgid "Group by"
 msgstr "Agrupar por"
 
@@ -154,7 +225,214 @@ msgid "No work in progress."
 msgstr "Nenhuma hora a faturar."
 
 msgid "Matter"
+msgstr "Caso"
+
+#, fuzzy
+#| msgid "Matters"
+msgid "Filter Matters"
+msgstr "Processos"
+
+msgid "Restore Defaults"
+msgstr "Restaurar padrões"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+#, fuzzy
+#| msgid "Matter"
+msgid "Edit Matter"
 msgstr "Processo"
+
+#, fuzzy
+#| msgid "Matter"
+msgid "Add Matter"
+msgstr "Processo"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Overview"
+msgstr "Visão geral"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "Rates"
+msgstr "Valores por hora"
+
+msgid "Activity"
+msgstr "Apontamentos"
+
+msgid "Events"
+msgstr "Compromissos"
+
+msgid "Tasks"
+msgstr "Tarefas"
+
+msgid "Proceedings"
+msgstr "Processos judiciais"
+
+msgid "Settlement"
+msgstr "Acordos"
+
+msgid "Ledger"
+msgstr "Movimentações financeiras"
+
+msgid "Filter"
+msgstr "Filtrar"
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "Open"
+msgstr "Em andamento"
+
+#, fuzzy
+#| msgid "Comp"
+msgid "Complete"
+msgstr "Abatimentos"
+
+msgid "Filter list..."
+msgstr "Filtrar lista..."
+
+#, fuzzy
+#| msgid "Account"
+msgid "Count"
+msgstr "Conta"
+
+msgid "Work Status"
+msgstr "Situação do trabalho"
+
+msgid "Proceeding"
+msgstr "Processo judicial"
+
+msgid "No matters found."
+msgstr "Nenhum caso encontrado."
+
+#, fuzzy
+#| msgid "Matter"
+msgid "Matter Detail"
+msgstr "Processo"
+
+msgid "Client"
+msgstr "Cliente"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Additional Billing Contacts"
+msgstr "Contatos adicionais de cobrança"
+
+msgid "Practice Area"
+msgstr "Área de atuação"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Open Date"
+msgstr "Data de abertura"
+
+msgid "Closed"
+msgstr "Encerrado"
+
+msgid "Jurisdiction"
+msgstr "Jurisdição"
+
+msgid "Billing Type"
+msgstr "Tipo de cobrança"
+
+msgid "Billable"
+msgstr "Faturável"
+
+msgid "Reference No."
+msgstr "Número de referência"
+
+msgid "Financials"
+msgstr "Financeiro"
+
+msgid "Balance Due"
+msgstr "Saldo a receber"
+
+#, fuzzy
+#| msgid "Low Trust Available (Pending)"
+msgid "Trust Available"
+msgstr "Saldo fiduciário baixo (pendente)"
+
+msgid "Add event"
+msgstr "Adicionar compromisso"
+
+#, fuzzy
+#| msgid "Upcoming Events"
+msgid "No upcoming events"
+msgstr "Próximos compromissos"
+
+msgid "Add task"
+msgstr "Adicionar tarefa"
+
+msgid "Edit judicial proceeding"
+msgstr "Editar processo judicial"
+
+msgid "Add judicial proceeding"
+msgstr "Adicionar processo judicial"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid ""
+"CNJ numbers are checked using the official check-digit algorithm. Other or "
+"historical numbers remain supported."
+msgstr ""
+"Os números CNJ são validados pelo cálculo oficial dos dígitos verificadores."
+" Outros formatos e números antigos continuam aceitos."
+
+msgid ""
+"Claim amounts in this section are explicitly in BRL, not converted from "
+"another currency."
+msgstr ""
+"Os valores da causa nesta seção são informados em reais (BRL), sem conversão"
+" de outra moeda."
+
+msgid "Are you sure you want to delete this proceeding?"
+msgstr "Tem certeza de que deseja excluir este processo judicial?"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Primary"
+msgstr "Principal"
+
+msgid "Date filed"
+msgstr "Distribuição"
+
+msgid "CNJ / case number"
+msgstr "Número CNJ / processo"
+
+msgid "Set as primary"
+msgstr "Definir como principal"
+
+msgid "Open court website"
+msgstr "Abrir site do tribunal"
+
+msgid "Copy case number"
+msgstr "Copiar número do processo"
+
+msgid "No judicial proceedings found for this case."
+msgstr "Nenhum processo judicial cadastrado para este caso."
+
+msgid "Admin"
+msgstr "Administrativo"
+
+msgid "Copy Case Number"
+msgstr "Copiar número do processo"
+
+msgid "View Proceedings"
+msgstr "Ver processos judiciais"
 
 msgid "Log In"
 msgstr "Entrar"
@@ -192,9 +470,6 @@ msgstr "Informe a nova senha"
 msgid "Set a new password"
 msgstr "Definir nova senha"
 
-msgid "Submit"
-msgstr "Enviar"
-
 msgid ""
 "This password reset link is invalid or has already been used. Please request"
 " a new one."
@@ -222,9 +497,6 @@ msgstr "Esqueceu sua senha?"
 msgid "Please enter the email address associated with your account."
 msgstr "Informe o endereço de e-mail associado à sua conta."
 
-msgid "Cancel"
-msgstr "Cancelar"
-
 msgid "Authenticator Code"
 msgstr "Código do autenticador"
 
@@ -245,18 +517,6 @@ msgstr "Digite o código de verificação enviado ao seu e-mail."
 
 msgid "Dash"
 msgstr "Painel"
-
-msgid "Matters"
-msgstr "Processos"
-
-msgid "Tasks"
-msgstr "Tarefas"
-
-msgid "Contacts"
-msgstr "Contatos"
-
-msgid "Activity"
-msgstr "Apontamentos"
 
 msgid "Invoicing"
 msgstr "Faturamento"

@@ -1,14 +1,16 @@
+{% load i18n %}
+{% load humanize %}
 {% block subcontent %}
   <div class="table-container">
     <table class="table proceedings-list card-table">
       <thead>
         <tr>
-          <th class="primary">Primary</th>
-          <th class="filed">Filed</th>
-          <th class="nickname">Nickname</th>
-          <th class="forum">County and Court</th>
-          <th class="case-no">Case No</th>
-          <th class="status">Status</th>
+          <th class="primary">{% trans "Primary" %}</th>
+          <th class="filed">{% trans "Date filed" %}</th>
+          <th class="nickname">{% trans "Short name" %}</th>
+          <th class="forum">{% trans "Court / tribunal" %}</th>
+          <th class="case-no">{% trans "CNJ / case number" %}</th>
+          <th class="status">{% trans "Status" %}</th>
         </tr>
       </thead>
       <tbody>
@@ -21,12 +23,12 @@
                 <button class="button-link"
                         hx-post="/matters/{{ matter.id }}/proceedings/{{ proceeding.id }}/set-primary"
                         hx-swap="none"
-                        title="Set as primary">
+                        title="{% trans 'Set as primary' %}">
                   <i class="icon-circle proceeding-primary-inactive"></i>
                 </button>
               {% endif %}
             </td>
-            <td class="filed">{{ proceeding.date_filed|date:"Y-m-d"|default:"" }}</td>
+            <td class="filed">{{ proceeding.date_filed|date:"SHORT_DATE_FORMAT"|default:"" }}</td>
             <td class="nickname card-desc">
               <a href="#"
                  type="button"
@@ -37,23 +39,30 @@
                  data-bs-toggle="modal"
                  data-bs-target="#htmx-modal-container">{{ proceeding.nickname|default:proceeding.forum }}</a>
             </td>
-            <td class="forum">{{ proceeding.forum }}</td>
+            <td class="forum">
+              {{ proceeding.forum }}
+              {% if proceeding.court_division %}<small>{% trans "Judicial division (vara)" %}: {{ proceeding.court_division }}</small>{% endif %}
+              {% if proceeding.case_class %}<small>{% trans "Procedural class" %}: {{ proceeding.case_class }}</small>{% endif %}
+              {% if proceeding.claim_amount_brl != None %}<small>{% trans "Initial claim value (BRL)" %}: R$ {{ proceeding.claim_amount_brl|floatformat:2|intcomma }}</small>{% endif %}
+              {% if proceeding.date_final_judgment %}<small>{% trans "Final judgment date" %}: {{ proceeding.date_final_judgment|date:"SHORT_DATE_FORMAT" }}</small>{% endif %}
+              {% if proceeding.case_url %}<small><a href="{{ proceeding.case_url }}" target="_blank" rel="noopener noreferrer">{% trans "Open court website" %}</a></small>{% endif %}
+            </td>
             <td class="case-no">
               {% if proceeding.case_number %}
                 <button type="button"
                         class="btn btn-sm action-btn copy-btn"
                         data-copy="{{ proceeding.case_number }}"
-                        title="Copy case number">
+                        title="{% trans 'Copy case number' %}">
                   <i class="icon-copy"></i>
                 </button>
               {% endif %}
               {{ proceeding.case_number }}
             </td>
-            <td class="status">{{ proceeding.status }}</td>
+            <td class="status">{{ proceeding.status_label }}</td>
           </tr>
         {% empty %}
           <tr>
-            <td colspan="6" class="empty-message">No proceedings found for this matter.</td>
+            <td colspan="6" class="empty-message">{% trans "No judicial proceedings found for this case." %}</td>
           </tr>
         {% endfor %}
       </tbody>
@@ -66,7 +75,7 @@
             hx-target="#htmx-modal-container"
             data-bs-toggle="modal"
             data-bs-target="#htmx-modal-container">
-      <i class="icon-plus with-text"></i> Add Proceeding
+      <i class="icon-plus with-text"></i> {% trans "Add judicial proceeding" %}
     </button>
   </div>
 {% endblock subcontent %}

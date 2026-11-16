@@ -1,7 +1,8 @@
+{% load i18n %}
 <div class="modal-dialog modal-md">
   <div class="modal-content">
     <div class="modal-header">
-      <h1 class="modal-title">Filter Matters</h1>
+      <h1 class="modal-title">{% trans "Filter Matters" %}</h1>
       <div>
         <button type="button" @click="$dispatch('close-modal')">
           <i class="icon-x"></i>
@@ -21,9 +22,9 @@
       <button type="button"
               class="btn btn-secondary"
               hx-post="{% url 'management:clear-filters' session_key='matter_filter' trigger='mattersChanged' %}">
-        Restore Defaults
+        {% trans "Restore Defaults" %}
       </button>
-      <button type="submit" form="matter-filter-form" class="btn btn-success">Apply</button>
+      <button type="submit" form="matter-filter-form" class="btn btn-success">{% trans "Apply" %}</button>
     </div>
   </div>
 </div>

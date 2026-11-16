@@ -1,11 +1,12 @@
+{% load i18n %}
 <div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
         {% if edit %}
-          Edit Matter
+          {% trans "Edit Matter" %}
         {% else %}
-          Add Matter
+          {% trans "Add Matter" %}
         {% endif %}
       </h1>
       <div>
@@ -35,13 +36,13 @@
                 class="btn btn-danger"
                 hx-get="{% url 'matters:delete' id=matter.id %}"
                 hx-target="#htmx-modal-container .modal-dialog"
-                hx-swap="outerHTML">Delete</button>
+                hx-swap="outerHTML">{% trans "Delete" %}</button>
       {% else %}
         <button type="button"
                 class="btn btn-secondary"
-                @click="$dispatch('close-modal')">Cancel</button>
+                @click="$dispatch('close-modal')">{% trans "Cancel" %}</button>
       {% endif %}
-      <button type="submit" form="matter-form" class="btn btn-success">Submit</button>
+      <button type="submit" form="matter-form" class="btn btn-success">{% trans "Submit" %}</button>
     </div>
   </div>
 </div>

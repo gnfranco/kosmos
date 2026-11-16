@@ -1,32 +1,33 @@
+{% load i18n %}
 {% load humanize %}
 <div class="matter-overview">
   <div class="overview-tables">
     <div class="overview-main-col">
       <table class="overview-table overview-main">
         <tr>
-          <th class="overview-table-head" colspan="2">Matter Detail</th>
+          <th class="overview-table-head" colspan="2">{% trans "Matter Detail" %}</th>
         </tr>
         <tr>
-          <th>Status</th>
+          <th>{% trans "Status" %}</th>
           <td id="overview-status">{% include "matters/overview/status.html" %}</td>
         </tr>
         <tr>
-          <th>Work Status</th>
+          <th>{% trans "Work Status" %}</th>
           <td id="overview-work-status">{% include "matters/overview/work-status.html" %}</td>
         </tr>
         <tr>
-          <th>Client</th>
+          <th>{% trans "Client" %}</th>
           <td>
             {% if matter.client %}
               <a href="{% url 'contacts:select' contact_id=matter.client.id %}">{{ matter.client.name }}</a>
             {% else %}
-              <span class="overview-empty">None</span>
+              <span class="overview-empty">{% trans "None" %}</span>
             {% endif %}
           </td>
         </tr>
         {% if billing_contacts %}
           <tr>
-            <th>Additional Billing Contacts</th>
+            <th>{% trans "Additional Billing Contacts" %}</th>
             <td>
               {# djlint:off #}
               {% for contact in billing_contacts %}{% if not forloop.first %}, {% endif %}<a href="{% url 'contacts:select' contact_id=contact.id %}">{{ contact.name }}</a>{% endfor %}
@@ -35,25 +36,25 @@
           </tr>
         {% endif %}
         <tr>
-          <th>Practice Area</th>
+          <th>{% trans "Practice Area" %}</th>
           <td id="overview-practice-area">{% include "matters/overview/practice-area.html" %}</td>
         </tr>
         <tr>
-          <th>Description</th>
+          <th>{% trans "Description" %}</th>
           <td id="overview-description">{% include "matters/overview/description.html" %}</td>
         </tr>
         <tr>
-          <th>Open Date</th>
-          <td>{{ matter.date_start|date:"Y-m-d"|default:"—" }}</td>
+          <th>{% trans "Open Date" %}</th>
+          <td>{{ matter.date_start|date:"SHORT_DATE_FORMAT"|default:"—" }}</td>
         </tr>
         {% if matter.date_end %}
           <tr>
-            <th>Closed</th>
-            <td>{{ matter.date_end|date:"Y-m-d" }}</td>
+            <th>{% trans "Closed" %}</th>
+            <td>{{ matter.date_end|date:"SHORT_DATE_FORMAT" }}</td>
           </tr>
         {% endif %}
         <tr>
-          <th>Jurisdiction</th>
+          <th>{% trans "Jurisdiction" %}</th>
           <td>
             {% if matter.jurisdiction %}
               {{ matter.jurisdiction }}
@@ -65,14 +66,14 @@
           </td>
         </tr>
         <tr>
-          <th>Billing Type</th>
+          <th>{% trans "Billing Type" %}</th>
           <td>
             {{ matter.get_billing_type_display }}
             {% if matter.flat_fee_amount %}· {{ matter.flat_fee_amount }}{% endif %}
           </td>
         </tr>
         <tr>
-          <th>Billable</th>
+          <th>{% trans "Billable" %}</th>
           <td>
             {% if matter.deferred_fees %}
               {{ matter.billable|yesno:"Yes,No" }}, Deferred Fees
@@ -83,7 +84,7 @@
         </tr>
         {% if matter.client_reference_id %}
           <tr>
-            <th>Reference No.</th>
+            <th>{% trans "Reference No." %}</th>
             <td>{{ matter.client_reference_id }}</td>
           </tr>
         {% endif %}
@@ -91,18 +92,18 @@
       {% if show_financial %}
         <table class="overview-table overview-financial">
           <tr>
-            <th class="overview-table-head" colspan="2">Financials</th>
+            <th class="overview-table-head" colspan="2">{% trans "Financials" %}</th>
           </tr>
           <tr>
-            <td>Balance Due</td>
+            <td>{% trans "Balance Due" %}</td>
             <td class="numeric">${{ balance_due|floatformat:2|intcomma }}</td>
           </tr>
           <tr>
-            <td>Work in Progress</td>
+            <td>{% trans "Work in Progress" %}</td>
             <td class="numeric">${{ work_in_progress|floatformat:2|intcomma }}</td>
           </tr>
           <tr>
-            <td>Trust Available</td>
+            <td>{% trans "Trust Available" %}</td>
             <td class="numeric trust-{{ trust_available_severity }}">${{ trust_available|floatformat:2|intcomma }}</td>
           </tr>
         </table>
@@ -117,12 +118,12 @@
         <tr>
           <th class="overview-table-head" colspan="2">
             <div class="overview-head-cell">
-              Events
+              {% trans "Events" %}
               <button type="button"
                       class="btn-check"
                       hx-get="{% url 'calendar:add-matter-origin' matter.id 'matters' %}"
                       hx-target="#htmx-modal-container"
-                      title="Add event">
+                      title="{% trans 'Add event' %}">
                 <i class="icon-plus"></i>
               </button>
             </div>
@@ -130,7 +131,7 @@
         </tr>
         {% for event in events %}
           <tr>
-            <td class="overview-cell-date">{{ event.date|date:"Y-m-d" }}</td>
+            <td class="overview-cell-date">{{ event.date|date:"SHORT_DATE_FORMAT" }}</td>
             <td class="overview-cell-text">
               <a href="#"
                  class="overview-link"
@@ -142,7 +143,7 @@
         {% empty %}
           <tr>
             <td colspan="2">
-              <span class="overview-empty">No upcoming events</span>
+              <span class="overview-empty">{% trans "No upcoming events" %}</span>
             </td>
           </tr>
         {% endfor %}
@@ -157,12 +158,12 @@
         <tr>
           <th class="overview-table-head" colspan="4">
             <div class="overview-head-cell">
-              Tasks
+              {% trans "Tasks" %}
               <button type="button"
                       class="btn-check"
                       hx-get="{% url 'matters:tasks-add' matter.id %}"
                       hx-target="#htmx-modal-container"
-                      title="Add task">
+                      title="{% trans 'Add task' %}">
                 <i class="icon-plus"></i>
               </button>
             </div>
@@ -170,7 +171,7 @@
         </tr>
         {% for task in tasks %}
           <tr {% if task.date_due and task.date_due < today %}class="overview-task-overdue"{% endif %}>
-            <td class="overview-cell-date">{{ task.date_due|date:"Y-m-d"|default:"—" }}</td>
+            <td class="overview-cell-date">{{ task.date_due|date:"SHORT_DATE_FORMAT"|default:"—" }}</td>
             <td class="overview-cell-user">
               {% if task.user %}{{ task.user.initials }}{% endif %}
             </td>
@@ -231,7 +232,7 @@
         </tr>
         {% for entry in recent_actions %}
           <tr>
-            <td class="overview-action-date">{{ entry.date|date:"Y-m-d" }}</td>
+            <td class="overview-action-date">{{ entry.date|date:"SHORT_DATE_FORMAT" }}</td>
             <td class="overview-action-user">{{ entry.user.initials }}</td>
             <td class="overview-cell-text">
               {% if entry.locked %}

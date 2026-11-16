@@ -6,6 +6,7 @@ from datetime import timedelta
 import pytest
 from django.test import Client
 from django.urls import reverse
+from django.utils.translation import gettext
 from django.utils import timezone
 
 from apps.accounts.models import CustomUser
@@ -88,11 +89,11 @@ def test_the_page_and_the_section_draw_the_cards(user):
     client = _client(user)
     for url in (reverse("dash:index"), reverse("dash:events-section")):
         html = client.get(url).content.decode()
-        assert "<h2>Upcoming Events</h2>" in html
+        assert f"<h2>{gettext('Upcoming Events')}</h2>" in html
         assert 'class="event-card is-soon"' in html
         assert reverse("calendar:detail", args=[event.id]) in html
 
 
 def test_with_nothing_pending_the_section_is_empty(user):
     html = _client(user).get(reverse("dash:events-section")).content.decode()
-    assert "Upcoming Events" not in html
+    assert gettext("Upcoming Events") not in html

@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load humanize %}
 {% block content %}
   <div class="toolbar matters-toolbar">
@@ -13,18 +14,18 @@
                 class="{% if custom_filter_active %}toggle-active{% endif %}"
                 data-bs-toggle="modal"
                 data-bs-target="#htmx-modal-container">
-          <i class="icon-list-filter with-text"></i>Filter
+          <i class="icon-list-filter with-text"></i>{% trans "Filter" %}
         </button>
         <button class="quick-status {% if filter_label == "Pending" %}toggle-active{% endif %}"
-                hx-post="{% url 'matters:filter-quick-status' 'Pending' %}">Pending</button>
+                hx-post="{% url 'matters:filter-quick-status' 'Pending' %}">{% trans "Pending" %}</button>
         <button class="quick-status {% if filter_label == "Open" %}toggle-active{% endif %}"
-                hx-post="{% url 'matters:filter-quick-status' 'Open' %}">Open</button>
+                hx-post="{% url 'matters:filter-quick-status' 'Open' %}">{% trans "Open" %}</button>
         <button class="quick-status {% if filter_label == "Complete" %}toggle-active{% endif %}"
-                hx-post="{% url 'matters:filter-quick-status' 'Complete' %}">Complete</button>
+                hx-post="{% url 'matters:filter-quick-status' 'Complete' %}">{% trans "Complete" %}</button>
         <input type="search"
                name="q"
                class="toolbar-search"
-               placeholder="Filter list . . ."
+               placeholder="{% trans 'Filter list...' %}"
                autofocus
                hx-get="{% url 'matters:quick-search' %}"
                hx-trigger="keyup changed delay:300ms, search"
@@ -34,7 +35,7 @@
       </div>
     </div>
     <div class="toolbar-right">
-      <span class="app-badge app-badge-lg">Count: {{ number_matters }}</span>
+      <span class="app-badge app-badge-lg">{% trans "Count" %}: {{ number_matters }}</span>
     </div>
   </div>
   <div class="table-container">
@@ -42,20 +43,20 @@
       <thead>
         <tr>
           <th class="name">
-            Matter
+            {% trans "Matter" %}
             <button class="btn-sort {% if current_order == 'name' %}active{% endif %}"
                     hx-post="{% url 'matters:order-by' 'name' %}">
               <i class="icon-chevrons-up-down"></i>
             </button>
           </th>
           <th class="work-status">
-            Work Status
+            {% trans "Work Status" %}
             <button class="btn-sort {% if current_order == 'work_status' %}active{% endif %}"
                     hx-post="{% url 'matters:order-by' 'work_status' %}">
               <i class="icon-chevrons-up-down"></i>
             </button>
           </th>
-          <th class="case-no">Proceeding</th>
+          <th class="case-no">{% trans "Proceeding" %}</th>
         </tr>
       </thead>
       <tbody id="matter-list-body">
@@ -63,7 +64,7 @@
           {% include "matters/row.html" %}
         {% empty %}
           <tr>
-            <td colspan="3" class="empty-message">No matters found.</td>
+            <td colspan="3" class="empty-message">{% trans "No matters found." %}</td>
           </tr>
         {% endfor %}
       </tbody>

@@ -1,0 +1,226 @@
+"""Brazilian proceeding extension: check digits, amounts, auth, compatibility."""
+from decimal import Decimal
+
+from django.http import Http404
+from django.template.loader import get_template
+from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.utils import translation
+from django.core.exceptions import ValidationError
+
+from apps.accounts.models import CustomUser
+from apps.matters.models import Matter
+from apps.matters.proceedings import views
+from apps.matters.proceedings.cnj import normalize_cnj
+from apps.matters.proceedings.forms import BRLAmountField, ProceedingForm
+from apps.matters.proceedings.models import Proceeding
+
+
+VALID_CNJ = "5000094-40.2025.4.03.6312"
+
+
+class CnjValidationTests(SimpleTestCase):
+    def test_verified_number_is_normalized(self):
+        self.assertEqual(normalize_cnj(VALID_CNJ), VALID_CNJ)
+        self.assertEqual(normalize_cnj("50000944020254036312"), VALID_CNJ)
+
+    def test_bad_digit_is_rejected(self):
+        with self.assertRaises(ValidationError):
+            normalize_cnj("5000094-41.2025.4.03.6312")
+
+    def test_invalid_format_and_segment_rejected(self):
+        for value in ("123", "5000094-40.2025.X.03.6312",
+                      "5000094-40.2025.0.03.6312"):
+            with self.subTest(value=value):
+                with self.assertRaises(ValidationError):
+                    normalize_cnj(value)
+
+    def test_other_case_number_keeps_original(self):
+        form = ProceedingForm(data={
+            "numbering_scheme": "OTHER",
+            "case_number": "20CV141360",
+            "date_filed": "2025-02-05",
+            "forum": "Superior Court",
+            "status": "Ongoing",
+            "primary": "False",
+        })
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        self.assertEqual(form.cleaned_data["case_number"], "20CV141360")
+
+    def test_cnj_scheme_requires_valid_check_digits(self):
+        form = ProceedingForm(data={
+            "numbering_scheme": "CNJ",
+            "case_number": "5000094-41.2025.4.03.6312",
+            "date_filed": "2025-02-05",
+            "forum": "TRF 3",
+            "status": "Ongoing",
+            "primary": "False",
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn("case_number", form.errors)
+
+    def test_form_uses_portuguese_labels_and_date_format(self):
+        with translation.override("pt-br"):
+            form = ProceedingForm()
+            self.assertEqual(str(form.fields["case_class"].label), "Classe processual")
+            self.assertEqual(str(form.fields["numbering_scheme"].label), "Tipo de numeração")
+            self.assertIsNotNone(get_template("matters/proceedings/list.html"))
+            self.assertIsNotNone(get_template("matters/proceedings/form.html"))
+
+    def test_brazilian_decimal_input_preserves_cents(self):
+        with translation.override("pt-br"):
+            form = ProceedingForm(data={
+                "numbering_scheme": "CNJ",
+                "case_number": VALID_CNJ,
+                "date_filed": "2025-03-01",
+                "forum": "TRF 3",
+                "status": "Ongoing",
+                "primary": "True",
+                "claim_amount_brl": "12.500,50",
+                "claim_updated_brl": "13.000,75",
+            })
+            self.assertTrue(form.is_valid(), form.errors.as_text())
+            self.assertEqual(
+                form.cleaned_data["claim_amount_brl"], Decimal("12500.50")
+            )
+            self.assertEqual(
+                form.cleaned_data["claim_updated_brl"], Decimal("13000.75")
+            )
+
+    def test_brazilian_integer_grouping_is_not_interpreted_as_cents(self):
+        with translation.override("pt-br"):
+            field = BRLAmountField(
+                required=False, localize=True, max_digits=15, decimal_places=2
+            )
+            self.assertEqual(field.clean("12.500"), Decimal("12500"))
+            self.assertEqual(field.clean("12.500,50"), Decimal("12500.50"))
+            self.assertEqual(field.clean("12500.50"), Decimal("12500.50"))
+            self.assertEqual(field.clean("12500,50"), Decimal("12500.50"))
+            for invalid in ("12.500.50", "1,234.50", "12,500,50"):
+                with self.subTest(invalid=invalid):
+                    with self.assertRaises(ValidationError):
+                        field.clean(invalid)
+
+    def test_cnj_scheme_requires_number(self):
+        form = ProceedingForm(data={
+            "numbering_scheme": "CNJ",
+            "date_filed": "2025-02-05",
+            "forum": "TRF 3",
+            "status": "Ongoing",
+            "primary": "False",
+        })
+        self.assertFalse(form.is_valid())
+        self.assertIn("case_number", form.errors)
+
+
+class BrazilianProceedingPersistenceTests(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(
+            username="lexbrtest", email="lexbrtest@example.com",
+            password="not-used", role="ADMIN",
+        )
+        self.matter_a = Matter.objects.create(
+            name="Caso A", user=self.user, status="Open"
+        )
+        self.matter_b = Matter.objects.create(
+            name="Caso B", user=self.user, status="Open"
+        )
+        self.request_factory = RequestFactory()
+
+    def request(self, method, url):
+        request = getattr(self.request_factory, method)(url)
+        request.user = self.user
+        return request
+
+    def test_creation_persists_fields_and_history(self):
+        form = ProceedingForm(data={
+            "numbering_scheme": "CNJ",
+            "case_number": "50000944020254036312",
+            "case_class": "Reclamação Trabalhista",
+            "court_division": "1ª Vara do Trabalho",
+            "forum": "TRT da 3ª Região",
+            "claim_amount_brl": "12500.50",
+            "claim_updated_brl": "13000.75",
+            "date_filed": "2025-03-01",
+            "date_final_judgment": "2026-02-01",
+            "case_url": "https://www.trt3.jus.br/",
+            "status": "Ongoing",
+            "primary": "True",
+        })
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        obj = form.save(commit=False)
+        obj.matter = self.matter_a
+        obj.user = self.user
+        obj.save()
+        obj.refresh_from_db()
+        self.assertEqual(obj.case_number, VALID_CNJ)
+        self.assertEqual(obj.claim_amount_brl, Decimal("12500.50"))
+        self.assertEqual(obj.claim_updated_brl, Decimal("13000.75"))
+        self.assertEqual(obj.date_final_judgment.isoformat(), "2026-02-01")
+        self.assertEqual(obj.history.first().case_class, "Reclamação Trabalhista")
+
+    def test_legacy_edit_does_not_erase_brazilian_metadata(self):
+        obj = Proceeding.objects.create(
+            matter=self.matter_a,
+            user=self.user,
+            case_number=VALID_CNJ,
+            numbering_scheme="CNJ",
+            case_class="Reclamação Trabalhista",
+            court_division="2ª Vara do Trabalho",
+            claim_amount_brl=Decimal("12500.50"),
+            claim_updated_brl=Decimal("18000.00"),
+            case_url="https://www.trt3.jus.br/",
+        )
+        form = ProceedingForm(
+            data={
+                "case_number": VALID_CNJ,
+                "forum": "TRT 3",
+                "date_filed": "2025-03-01",
+                "status": "Ongoing",
+            },
+            instance=obj,
+        )
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        form.save()
+        obj.refresh_from_db()
+        self.assertEqual(obj.numbering_scheme, "CNJ")
+        self.assertEqual(obj.case_class, "Reclamação Trabalhista")
+        self.assertEqual(obj.court_division, "2ª Vara do Trabalho")
+        self.assertEqual(obj.claim_amount_brl, Decimal("12500.50"))
+        self.assertEqual(obj.claim_updated_brl, Decimal("18000.00"))
+        self.assertEqual(obj.case_url, "https://www.trt3.jus.br/")
+
+    def test_one_case_can_have_several_judicial_proceedings(self):
+        for num in ("20CV141360", "20CV141361"):
+            Proceeding.objects.create(
+                matter=self.matter_a, user=self.user,
+                numbering_scheme="OTHER", case_number=num
+            )
+        self.assertEqual(self.matter_a.proceeding_set.count(), 2)
+
+    def test_cross_matter_edit_and_delete_do_not_touch_proceeding(self):
+        alien = Proceeding.objects.create(
+            matter=self.matter_b, user=self.user,
+            case_number="OTHER-123", numbering_scheme="OTHER",
+        )
+        url = f"/matters/{self.matter_a.pk}/proceedings/{alien.pk}/edit"
+        with self.assertRaises(Http404):
+            views.edit(self.request("get", url),
+                       id=self.matter_a.pk, proceeding_id=alien.pk)
+        with self.assertRaises(Http404):
+            views.edit(self.request("post", url),
+                       id=self.matter_a.pk, proceeding_id=alien.pk)
+        url = f"/matters/{self.matter_a.pk}/proceedings/{alien.pk}/delete"
+        with self.assertRaises(Http404):
+            views.delete(self.request("delete", url),
+                         matter_id=self.matter_a.pk, proceeding_id=alien.pk)
+        self.assertTrue(Proceeding.objects.filter(pk=alien.pk).exists())
+
+    def test_delete_refuses_get(self):
+        obj = Proceeding.objects.create(
+            matter=self.matter_a, user=self.user, case_number="LEGACY"
+        )
+        url = f"/matters/{self.matter_a.pk}/proceedings/{obj.pk}/delete"
+        response = views.delete(self.request("get", url),
+                                matter_id=self.matter_a.pk, proceeding_id=obj.pk)
+        self.assertEqual(response.status_code, 405)
+        self.assertTrue(Proceeding.objects.filter(pk=obj.pk).exists())

@@ -21,6 +21,17 @@ Display
   min-width: 18rem;
 }
 
+.proceedings-list .forum small {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 0.2rem;
+  color: var(--color-muted-more);
+}
+
+.proceedings-list .case-no {
+  overflow-wrap: anywhere;
+}
+
 .proceedings-list .filed {
   width: 9rem;
 }

@@ -1,8 +1,9 @@
+{% load i18n %}
 {% load humanize %}
 <tr id="matter-{{ matter.id }}">
   <td class="name card-title">
     <a href={% url 'matters:contacts' id=matter.id %}>{{ matter.name }}</a>
-    {% if not matter.billable %}<span class="app-badge app-badge-sm badge-gray">Admin</span>{% endif %}
+    {% if not matter.billable %}<span class="app-badge app-badge-sm badge-gray">{% trans "Admin" %}</span>{% endif %}
   </td>
   <td id="show-matter-work-status-{{ matter.id }}" class="card-desc">
     <a class="button-link show-status-form-button"
@@ -27,11 +28,11 @@
             <li>
               <a class="dropdown-item action-btn copy-btn"
                  href="#"
-                 data-copy="{{ matter.primary_proceeding.case_number }}"><i class="icon-copy"></i> Copy Case Number</a>
+                 data-copy="{{ matter.primary_proceeding.case_number }}"><i class="icon-copy"></i> {% trans "Copy Case Number" %}</a>
             </li>
             <li>
               <a class="dropdown-item"
-                 href="{% url 'matters:proceedings-index' id=matter.id %}"><i class="icon-eye"></i> View Proceedings</a>
+                 href="{% url 'matters:proceedings-index' id=matter.id %}"><i class="icon-eye"></i> {% trans "View Proceedings" %}</a>
             </li>
           </ul>
         </div>
