@@ -1,0 +1,16 @@
+# Pilot separated from adv.linvora.com.br and from the Linvora SaaS app.
+# Replace @BASIC_AUTH_HASH@ with: caddy hash-password --plaintext '<random>'
+lex.linvora.com.br {
+    encode zstd gzip
+    basicauth {
+        piloto @BASIC_AUTH_HASH@
+    }
+    @static path /static/*
+    handle @static {
+        root * /srv/kosmos-lex/app
+        file_server
+    }
+    handle {
+        reverse_proxy 127.0.0.1:18085
+    }
+}
