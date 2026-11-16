@@ -227,10 +227,8 @@ msgstr "Nenhuma hora a faturar."
 msgid "Matter"
 msgstr "Caso"
 
-#, fuzzy
-#| msgid "Matters"
 msgid "Filter Matters"
-msgstr "Processos"
+msgstr "Filtrar casos"
 
 msgid "Restore Defaults"
 msgstr "Restaurar padrões"
@@ -238,15 +236,11 @@ msgstr "Restaurar padrões"
 msgid "Apply"
 msgstr "Aplicar"
 
-#, fuzzy
-#| msgid "Matter"
 msgid "Edit Matter"
-msgstr "Processo"
+msgstr "Editar caso"
 
-#, fuzzy
-#| msgid "Matter"
 msgid "Add Matter"
-msgstr "Processo"
+msgstr "Adicionar caso"
 
 msgid "Delete"
 msgstr "Excluir"
@@ -293,18 +287,14 @@ msgstr "Pendente"
 msgid "Open"
 msgstr "Em andamento"
 
-#, fuzzy
-#| msgid "Comp"
 msgid "Complete"
-msgstr "Abatimentos"
+msgstr "Concluído"
 
 msgid "Filter list..."
 msgstr "Filtrar lista..."
 
-#, fuzzy
-#| msgid "Account"
 msgid "Count"
-msgstr "Conta"
+msgstr "Quantidade"
 
 msgid "Work Status"
 msgstr "Situação do trabalho"
@@ -315,10 +305,8 @@ msgstr "Processo judicial"
 msgid "No matters found."
 msgstr "Nenhum caso encontrado."
 
-#, fuzzy
-#| msgid "Matter"
 msgid "Matter Detail"
-msgstr "Processo"
+msgstr "Detalhes do caso"
 
 msgid "Client"
 msgstr "Cliente"
@@ -359,18 +347,14 @@ msgstr "Financeiro"
 msgid "Balance Due"
 msgstr "Saldo a receber"
 
-#, fuzzy
-#| msgid "Low Trust Available (Pending)"
 msgid "Trust Available"
-msgstr "Saldo fiduciário baixo (pendente)"
+msgstr "Saldo fiduciário disponível"
 
 msgid "Add event"
 msgstr "Adicionar compromisso"
 
-#, fuzzy
-#| msgid "Upcoming Events"
 msgid "No upcoming events"
-msgstr "Próximos compromissos"
+msgstr "Nenhum compromisso próximo"
 
 msgid "Add task"
 msgstr "Adicionar tarefa"
@@ -550,3 +534,61 @@ msgstr "Sair"
 
 msgid "Toggle sidebar"
 msgstr "Expandir ou recolher menu lateral"
+
+
+msgid "Add Practice Area"
+msgstr "Adicionar área de atuação"
+
+msgid "Active"
+msgstr "Ativa"
+
+msgid "Hourly"
+msgstr "Por hora"
+
+msgid "No practice areas found."
+msgstr "Nenhuma área de atuação encontrada."
+
+msgid "Client Reference"
+msgstr "Referência do cliente"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "copied"
+msgstr "copiados"
+
+msgid "Inactive"
+msgstr "Inativa"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Clio Matter"
+msgstr "Caso do Clio"
+
+msgid "All"
+msgstr "Todas"
+
+msgid "Matter Name"
+msgstr "Nome do caso"
+
+msgid "No (Administrative)"
+msgstr "Não (administrativo)"
+
+msgid "Deferred Fee Arrangement"
+msgstr "Honorários diferidos"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Edit Practice Area"
+msgstr "Editar área de atuação"
+
+msgid "Flat Fee Amount"
+msgstr "Valor dos honorários fixos"
+
+msgid "Flat Fee"
+msgstr "Valor fixo"
+
+msgid "Practice Areas"
+msgstr "Áreas de atuação"

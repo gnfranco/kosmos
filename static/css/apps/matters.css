@@ -861,3 +861,32 @@ Matter Overview tab
   border-right: 1px solid var(--selected-border);
   margin-right: -1px;
 }
+
+/* Keep the case form usable on short Android viewports: only its fields
+   scroll, leaving the heading and the Save/Cancel controls available. */
+@media (width <= 767px) {
+  .matter-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .matter-modal .modal-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .matter-modal .modal-footer {
+    flex-shrink: 0;
+  }
+
+  .matter-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matter-form .form-group {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+}

@@ -1,6 +1,7 @@
+{% load i18n %}
 <div class="toolbar">
   <div class="toolbar-left">
-    <h2>Practice Areas</h2>
+    <h2>{% trans "Practice Areas" %}</h2>
     <div class="filter-tools">
       <button type="button"
               hx-get="{% url 'settings:add-practice-area' %}"
@@ -10,13 +11,13 @@
       </button>
       <a class="{% if practice_area_filter == 'active' %}toggle-active{% endif %}"
          href="#"
-         hx-post="{% url 'settings:practice-area-filter' 'active' %}">Active</a>
+         hx-post="{% url 'settings:practice-area-filter' 'active' %}">{% trans "Active" %}</a>
       <a class="{% if practice_area_filter == 'inactive' %}toggle-active{% endif %}"
          href="#"
-         hx-post="{% url 'settings:practice-area-filter' 'inactive' %}">Inactive</a>
+         hx-post="{% url 'settings:practice-area-filter' 'inactive' %}">{% trans "Inactive" %}</a>
       <a class="{% if practice_area_filter == 'all' %}toggle-active{% endif %}"
          href="#"
-         hx-post="{% url 'settings:practice-area-filter' 'all' %}">All</a>
+         hx-post="{% url 'settings:practice-area-filter' 'all' %}">{% trans "All" %}</a>
     </div>
   </div>
 </div>
@@ -24,8 +25,8 @@
   <table class="table settings-table">
     <thead>
       <tr>
-        <th>Name</th>
-        <th class="status-col center-data">Active</th>
+        <th>{% trans "Name" %}</th>
+        <th class="status-col center-data">{% trans "Active" %}</th>
       </tr>
     </thead>
     <tbody>
@@ -43,12 +44,7 @@
                   <a class="dropdown-item"
                      hx-get="{% url 'settings:edit-practice-area' practice_area.id %}"
                      hx-target="#htmx-modal-container"
-                     hx-trigger="click"><i class="icon-pencil"></i> Edit</a>
-                </li>
-                <li>
-                  <a class="dropdown-item"
-                     hx-post="{% url 'settings:delete-practice-area' practice_area.id %}"
-                     hx-confirm="Are you sure? This will also remove the practice area from any matters or intakes using it."><i class="icon-circle-x"></i> Delete</a>
+                     hx-trigger="click"><i class="icon-pencil"></i> {% trans "Edit" %}</a>
                 </li>
               </ul>
             </div>
@@ -63,7 +59,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="2" class="empty-message">No practice areas found.</td>
+          <td colspan="2" class="empty-message">{% trans "No practice areas found." %}</td>
         </tr>
       {% endfor %}
     </tbody>
