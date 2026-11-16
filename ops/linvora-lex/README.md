@@ -74,6 +74,6 @@ Utilizar somente `DJANGO_ADMIN_EMAIL` e `DJANGO_ADMIN_PASSWORD` do arquivo; os v
 
 ### Próximos testes
 
-Backup local inicial criado por `ops/linvora-lex/backup-lex.sh`: PostgreSQL custom dump e `media/` em `/srv/kosmos-lex/backups/`, acessíveis apenas ao root. **Restauração de teste concluída com sucesso** em banco temporário, com 404 migrações, e o banco temporário foi excluído. Ainda faltam cópia offsite, agendamento de backups, controle de retenção e teste completo de recuperação operacional.
+Backup local inicial criado por `ops/linvora-lex/backup-lex.sh`: PostgreSQL custom dump e `media/` em `/srv/kosmos-lex/backups/`, acessíveis apenas ao root. **Restauração de teste concluída com sucesso** em banco temporário, com 404 migrações, e o banco temporário foi excluído. O timer `kosmos-lex-backup.timer` realiza backup local diário (06:30 UTC, aproximadamente 03:30 BRT), usando executável root-owned instalado em `/usr/local/sbin`. **Ainda faltam backup offsite, retenção/monitoramento e teste completo de recuperação operacional** antes de inserir dados reais.
 
 Homologar navegação, permissões de usuários, agenda e casos, OCR, financeiro, exportação de dados e backup/restauração integral. Permanecer com dados fictícios até validação.

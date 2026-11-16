@@ -1,0 +1,14 @@
+[Unit]
+Description=Backup local do Kosmos Lex (PostgreSQL + media)
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/srv/kosmos-lex/app
+ExecStart=/usr/local/sbin/kosmos-lex-backup
+UMask=0077
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full

@@ -6,10 +6,15 @@ test "$(id -u)" = 0 || { echo "Run as root" >&2; exit 2; }
 test -x "$APP/.venv/bin/gunicorn" || { echo "Python env missing" >&2; exit 2; }
 install -o root -g root -m 0644 "$TEMPLATE/kosmos-lex.service" /etc/systemd/system/kosmos-lex.service
 install -o root -g root -m 0644 "$TEMPLATE/kosmos-lex-worker.service" /etc/systemd/system/kosmos-lex-worker.service
+# Root-owned backup executable: the kosmoslex Git checkout is writable by the app user.
+install -o root -g root -m 0750 "$TEMPLATE/backup-lex.sh" /usr/local/sbin/kosmos-lex-backup
+install -o root -g root -m 0644 "$TEMPLATE/kosmos-lex-backup.service" /etc/systemd/system/kosmos-lex-backup.service
+install -o root -g root -m 0644 "$TEMPLATE/kosmos-lex-backup.timer" /etc/systemd/system/kosmos-lex-backup.timer
 systemctl daemon-reload
-systemctl enable --now kosmos-lex.service kosmos-lex-worker.service
+systemctl enable --now kosmos-lex.service kosmos-lex-worker.service kosmos-lex-backup.timer
 systemctl is-active --quiet kosmos-lex.service
 systemctl is-active --quiet kosmos-lex-worker.service
+systemctl is-active --quiet kosmos-lex-backup.timer
 echo "SERVICES_ACTIVE"
 # Production HTTPS is handled by the existing Caddy instance.
 # The Django account login + email/TOTP is the single user-facing authentication.

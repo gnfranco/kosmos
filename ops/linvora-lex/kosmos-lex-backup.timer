@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup local diario Kosmos Lex (homologacao)
+[Timer]
+OnCalendar=*-*-* 06:30:00 UTC
+RandomizedDelaySec=10m
+Persistent=true
+Unit=kosmos-lex-backup.service
+[Install]
+WantedBy=timers.target
