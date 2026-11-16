@@ -10,7 +10,7 @@ Aplicação jurídica separada do Escritório ON e do Odoo. **Não executar** `s
 - Banco: PostgreSQL local, banco e papel exclusivos `kosmoslex`.
 - Serviço web: `kosmos-lex.service`; tarefas: `kosmos-lex-worker.service`.
 - Caddy: `/etc/caddy/lex.caddy`, importado ao final do Caddyfile principal.
-- Autenticação extra de piloto em Caddy por hash bcrypt. Senha **não** versionada.
+- Autenticação no próprio Django/Kosmos com 2FA, sem prompt adicional de Basic Auth no Caddy. O Caddy aplica TLS, HSTS e oculta URLs técnicas.
 - Variáveis e senhas: `/srv/kosmos-lex/app/config/.env`, **não versionar**.
 - Arquivos: `media/` privado; Caddy serve apenas `static/`. **Nunca** expor `media/` diretamente.
 
@@ -31,7 +31,7 @@ A branch `linvora/hetzner-lex` guarda a integração e a documentação de deplo
 1. Criar DNS A `lex` no Registro.br, apontando ao IPv4 público do Hetzner.
 2. Usar Python 3.13 instalado pelo `uv`, PostgreSQL 16 e extensões `vector` e `pg_trgm` **somente no banco kosmoslex**.
 3. Criar uma role sem privilégios administrativos, banco exclusivo e segredo aleatório.
-4. Usar `DEBUG=False`, `ENV=dev`, `ALLOWED_HOSTS=lex.linvora.com.br,127.0.0.1`, `CSRF_TRUSTED_ORIGINS=https://lex.linvora.com.br`, `TIME_ZONE=America/Sao_Paulo` e `EMAIL_NOTIFICATIONS=False`.
+4. Usar `DEBUG=False`, `ENV=prod` para a execução hospedada, `ALLOWED_HOSTS=lex.linvora.com.br,127.0.0.1`, `CSRF_TRUSTED_ORIGINS=https://lex.linvora.com.br`, `TIME_ZONE=America/Sao_Paulo` e `EMAIL_NOTIFICATIONS=False` enquanto os dados forem fictícios.
 5. Rodar `uv sync --frozen --no-dev`, `manage.py check --deploy`, `manage.py migrate` e `collectstatic`; registrar resultado.
 6. Subir apenas serviços com prefixo `kosmos-lex`; não reiniciar os serviços de Odoo ou Escritório ON.
 7. Testar Caddy com `caddy validate --config /etc/caddy/Caddyfile` antes de `systemctl reload caddy`; preservar cópia original do Caddyfile.
@@ -70,7 +70,7 @@ No **Orion**, com acesso à VPN Hetzner:
 ssh -i ~/.ssh/hetzner_linvora_ed25519 root@10.77.0.1 'cat /root/kosmos-lex-access.txt'
 ```
 
-A saída mostra o usuário/senha da proteção do Caddy e o e-mail/senha do administrador Django. O login Django exige um segundo fator enviado ao e-mail cadastrado. O arquivo de credenciais reside exclusivamente no Hetzner, com permissão 0600.
+Utilizar somente `DJANGO_ADMIN_EMAIL` e `DJANGO_ADMIN_PASSWORD` do arquivo; os valores `CADDY_BASIC_*` são legados e **não** devem ser utilizados. O Kosmos exige um código de login enviado por e-mail ou TOTP configurado. As senhas permanecem no Hetzner (0600), nunca no Git ou nesta documentação.
 
 ### Próximos testes
 

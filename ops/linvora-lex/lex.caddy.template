@@ -1,10 +1,14 @@
-# Pilot separated from adv.linvora.com.br and from the Linvora SaaS app.
-# bcrypt hash is generated from the random pilot password by install-services.sh
+# Kosmos Lex: HTTPS automatico pelo Caddy, autenticacao no Django/2FA.
+# Host isolado de adv.linvora.com.br e app.linvora.com.br.
 lex.linvora.com.br {
     encode zstd gzip
-    basicauth {
-        piloto @BASIC_AUTH_HASH@
+    header {
+        Strict-Transport-Security "max-age=86400"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
     }
+    @internal_only path /health/* /mcp /mcp/* /.well-known/* /admin /admin/*
+    respond @internal_only 404
     @static path /static/*
     handle @static {
         root * /srv/kosmos-lex/app
