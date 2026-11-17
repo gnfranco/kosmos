@@ -598,3 +598,54 @@ msgstr "Sair"
 
 msgid "Toggle sidebar"
 msgstr "Expandir ou recolher menu lateral"
+
+msgid "Not specified"
+msgstr "Não informado"
+
+msgid "Hourly fee agreement"
+msgstr "Honorários por hora"
+
+msgid "Fixed fee agreement"
+msgstr "Honorários de valor fixo"
+
+msgid "Success fee agreement"
+msgstr "Honorários de êxito (percentual)"
+
+msgid "Mixed fee agreement"
+msgstr "Honorários mistos (entrada e êxito)"
+
+msgid "Stage-based fee agreement"
+msgstr "Honorários por etapa"
+
+msgid "Pro bono / no fee"
+msgstr "Gratuito / pro bono"
+
+msgid "Other fee agreement"
+msgstr "Outra modalidade de honorários"
+
+msgid "Contractual Fee Arrangement"
+msgstr "Modalidade de honorários contratados"
+
+msgid "Success Fee Percentage (%)"
+msgstr "Percentual de êxito (%)"
+
+msgid "Contractual Success Fee Basis"
+msgstr "Base de cálculo contratada"
+
+msgid "Fee Agreement Notes"
+msgstr "Condições adicionais do contrato"
+
+msgid "Internal Billing Method"
+msgstr "Faturamento interno (modelo atual)"
+
+msgid "Contractual Fees"
+msgstr "Honorários contratuais"
+
+msgid "For recordkeeping only. These terms do not calculate, issue or collect invoices automatically. Refer to the signed engagement agreement."
+msgstr "Apenas registro contratual. Estes dados não calculam, emitem ou cobram honorários automaticamente. Consulte o contrato assinado."
+
+msgid "Enter the success fee percentage agreed in the contract."
+msgstr "Informe o percentual de êxito previsto no contrato."
+
+msgid "Describe precisely the contractual basis for the percentage."
+msgstr "Descreva exatamente sobre qual valor incide o percentual contratado."
