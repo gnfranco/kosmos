@@ -890,3 +890,20 @@ Matter Overview tab
     min-width: 0;
   }
 }
+
+
+/* The agreement is metadata, not an invoice. Visually separate it from
+   the American billing engine without changing other forms. */
+.matter-form .matter-contract-heading {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border-medium);
+  padding-top: 1rem;
+}
+
+.matter-contract-heading h2 {
+  font-weight: 500;
+}
+
+.matter-contract-heading p {
+  margin-top: 0.5rem;
+}

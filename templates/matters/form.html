@@ -27,7 +27,22 @@
         this matter's edit form, not to a blank add form.
         {% endcomment %}
         {% if edit %}<input type="hidden" name="matter_id" value="{{ matter.id }}">{% endif %}
-        {{ form }}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          {% if field.name == "fee_agreement_type" %}
+            <div class="matter-contract-heading">
+              <h2>{% trans "Contractual Fees" %}</h2>
+              <p>{% trans "For recordkeeping only. These terms do not calculate, issue or collect invoices automatically. Refer to the signed engagement agreement." %}</p>
+            </div>
+          {% endif %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div>
+              {{ field }}
+              {{ field.errors }}
+            </div>
+          </div>
+        {% endfor %}
       </form>
     </div>
     <div class="modal-footer">
@@ -59,6 +74,19 @@
       amountField.value = '';
     }
   }
+  function toggleContractFeeFields() {
+    const select = document.getElementById('id_fee_agreement_type');
+    if (!select) return;
+    const show = ['SUCCESS', 'MIXED'].includes(select.value);
+    for (const id of ['id_fee_success_percentage', 'id_fee_success_basis']) {
+      const input = document.getElementById(id);
+      if (!input) continue;
+      const row = input.closest('.form-group');
+      if (row) row.style.display = show ? '' : 'none';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', toggleContractFeeFields);
+  toggleContractFeeFields();
   document.addEventListener('DOMContentLoaded', toggleFlatFeeAmount);
   toggleFlatFeeAmount();
 </script>

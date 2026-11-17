@@ -1,8 +1,12 @@
+from decimal import Decimal
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import ProtectedError
 from django.db.models.signals import post_delete, pre_delete
 from django.dispatch import receiver
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
 
 from apps.contacts.models import Contact
@@ -11,6 +15,20 @@ from utils.models import AuditMixin
 BILLING_TYPE_CHOICES = (
     ("HOURLY", "Hourly"),
     ("FLAT_FEE", "Flat Fee"),
+)
+
+
+# Contractual engagement is distinct from the internal invoicing engine's
+# HOURLY/FLAT_FEE codes. No account entries or invoices are generated here.
+FEE_AGREEMENT_CHOICES = (
+    ("UNSPECIFIED", _("Not specified")),
+    ("HOURLY", _("Hourly fee agreement")),
+    ("FIXED", _("Fixed fee agreement")),
+    ("SUCCESS", _("Success fee agreement")),
+    ("MIXED", _("Mixed fee agreement")),
+    ("PHASED", _("Stage-based fee agreement")),
+    ("NO_FEE", _("Pro bono / no fee")),
+    ("OTHER", _("Other fee agreement")),
 )
 
 
@@ -58,6 +76,25 @@ class Matter(AuditMixin, models.Model):
     flat_fee_amount = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+    # Brazilian engagement metadata. These terms describe the signed agreement,
+    # not the amount owed, billed, paid or transferred to the attorney.
+    fee_agreement_type = models.CharField(
+        max_length=20,
+        choices=FEE_AGREEMENT_CHOICES,
+        default="UNSPECIFIED",
+    )
+    fee_success_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[
+            MinValueValidator(Decimal("0.01")),
+            MaxValueValidator(Decimal("100.00")),
+        ],
+    )
+    fee_success_basis = models.CharField(max_length=255, blank=True, default="")
+    fee_agreement_notes = models.TextField(blank=True, default="")
     # Deferred-fee arrangement (e.g. hybrid agreements): fees accrue but are not
     # currently collectible, and the retainer is waived. Drives the low-trust-available
     # exclusion regardless of whether the matter has been invoiced yet.

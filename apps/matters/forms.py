@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.db.models import Q
 from django.utils.translation import (
@@ -37,6 +39,26 @@ class ContactComboboxWidget(forms.Widget):
 
 
 class MatterForm(forms.ModelForm):
+    # Accept 25,50 in pt-BR without converting the stored Decimal to a
+    # floating-point number. The value represents a contractual percentage.
+    fee_success_percentage = forms.DecimalField(
+        label=_("Success Fee Percentage (%)"),
+        required=False,
+        localize=True,
+        max_digits=5,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
+        max_value=Decimal("100.00"),
+        widget=forms.TextInput(attrs={"inputmode": "decimal"}),
+    )
+
+    CONTRACT_FIELDS = (
+        "fee_agreement_type",
+        "fee_success_percentage",
+        "fee_success_basis",
+        "fee_agreement_notes",
+    )
+
     class Meta:
         model = Matter
 
@@ -54,6 +76,10 @@ class MatterForm(forms.ModelForm):
             "billing_type",
             "deferred_fees",
             "flat_fee_amount",
+            "fee_agreement_type",
+            "fee_success_percentage",
+            "fee_success_basis",
+            "fee_agreement_notes",
         )
 
         STATUSES = Matter.STATUS_CHOICES
@@ -96,6 +122,11 @@ class MatterForm(forms.ModelForm):
                 attrs={"step": "0.01"},
             ),
             "deferred_fees": forms.Select(choices=YESNO_CHOICES),
+            "fee_agreement_type": forms.Select(),
+            "fee_success_basis": forms.TextInput(
+                attrs={"class": "span3", "maxlength": 255}
+            ),
+            "fee_agreement_notes": forms.Textarea(attrs={"class": "span3", "rows": 2}),
         }
 
         labels = {
@@ -111,9 +142,13 @@ class MatterForm(forms.ModelForm):
             "client_reference_id": _("Client Reference"),
             "practice_area": _("Practice Area"),
             "billing_contacts": _("Additional Billing Contacts"),
-            "billing_type": _("Billing Type"),
+            "billing_type": _("Internal Billing Method"),
             "flat_fee_amount": _("Flat Fee Amount"),
             "deferred_fees": _("Deferred Fee Arrangement"),
+            "fee_agreement_type": _("Contractual Fee Arrangement"),
+            "fee_success_percentage": _("Success Fee Percentage (%)"),
+            "fee_success_basis": _("Contractual Success Fee Basis"),
+            "fee_agreement_notes": _("Fee Agreement Notes"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -163,6 +198,14 @@ class MatterForm(forms.ModelForm):
         # focusable, with no error shown to the user.
         self.use_required_attribute = False
 
+        # Older clients may POST the historic form without these optional
+        # fields. Never overwrite a contract in that situation.
+        if self.is_bound and not any(
+            name in self.data for name in self.CONTRACT_FIELDS
+        ):
+            for name in self.CONTRACT_FIELDS:
+                self.fields.pop(name)
+
         # Existing cases must remain editable when their historical category
         # was deactivated. New cases only offer active categories.
         current_area_id = self.instance.practice_area_id
@@ -182,6 +225,15 @@ class MatterForm(forms.ModelForm):
             (value, status_labels.get(value, label))
             for value, label in Matter.STATUS_CHOICES
         ]
+
+        if "fee_agreement_type" in self.fields:
+            self.fields["fee_agreement_type"].widget.attrs["onchange"] = (
+                "toggleContractFeeFields()"
+            )
+            if (get_language() or "").lower().replace("_", "-") == "pt-br":
+                self.fields["fee_success_percentage"].widget.attrs["placeholder"] = (
+                    "25,00"
+                )
 
         # Keep persisted billing codes unchanged; translate only their labels.
         billing_labels = {"HOURLY": _("Hourly"), "FLAT_FEE": _("Flat Fee")}
@@ -206,3 +258,26 @@ class MatterForm(forms.ModelForm):
                 },
             )
             date_field.input_formats = ["%d/%m/%Y", "%Y-%m-%d"]
+
+    def clean(self):
+        cleaned = super().clean()
+        if "fee_agreement_type" not in self.fields:
+            return cleaned
+
+        arrangement = cleaned.get("fee_agreement_type", "UNSPECIFIED")
+        if arrangement in ("SUCCESS", "MIXED"):
+            if cleaned.get("fee_success_percentage") is None:
+                self.add_error(
+                    "fee_success_percentage",
+                    _("Enter the success fee percentage agreed in the contract."),
+                )
+            if not (cleaned.get("fee_success_basis") or "").strip():
+                self.add_error(
+                    "fee_success_basis",
+                    _("Describe precisely the contractual basis for the percentage."),
+                )
+        else:
+            # Do not carry an obsolete percentage forward after a mode change.
+            cleaned["fee_success_percentage"] = None
+            cleaned["fee_success_basis"] = ""
+        return cleaned
