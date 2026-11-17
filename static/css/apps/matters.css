@@ -907,3 +907,34 @@ Matter Overview tab
 .matter-contract-heading p {
   margin-top: 0.5rem;
 }
+
+
+/* Desktop-first contractual fees: meaningful amounts align on one row,
+   while the basis and payment terms have space to be read in full. */
+.matter-form .matter-fee-wide {
+  grid-column: 1 / -1;
+}
+
+.matter-form .matter-fee-amount {
+  min-width: 0;
+}
+
+.matter-form .matter-fee-help {
+  display: block;
+  color: var(--text-muted, #667085);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 0.3rem;
+}
+
+.matter-form .matter-contract-heading {
+  margin-top: 1rem;
+}
+
+.matter-form .matter-legacy-fee-note {
+  border-left: 3px solid var(--warning, #a86d15);
+  background: var(--surface-low, #f7f5ed);
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}

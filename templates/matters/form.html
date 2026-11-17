@@ -32,14 +32,26 @@
           {% if field.name == "fee_agreement_type" %}
             <div class="matter-contract-heading">
               <h2>{% trans "Contractual Fees" %}</h2>
-              <p>{% trans "For recordkeeping only. These terms do not calculate, issue or collect invoices automatically. Refer to the signed engagement agreement." %}</p>
+              <p>{% trans "Record the signed agreement here. This section does not generate invoices or calculate amounts owed." %}</p>
+              {% if form.show_legacy_fee_notice %}
+                <p class="matter-legacy-fee-note">
+                  <strong>{% trans "Old internal billing amount:" %} R$ {{ form.instance.flat_fee_amount|floatformat:2 }}.</strong>
+                  {% trans "This amount was not copied into the contractual fixed fee. Check the signed contract before entering it." %}
+                </p>
+              {% endif %}
+              {% if form.needs_fee_basis_review %}
+                <p class="matter-legacy-fee-note">
+                  {% trans "The saved percentage basis contains only a number. Review the contractual description of which amounts are covered; do not assume that it is the claim value." %}
+                </p>
+              {% endif %}
             </div>
           {% endif %}
-          <div class="form-group">
+          <div class="form-group{% if field.name == 'fee_agreement_type' or field.name == 'fee_success_basis' or field.name == 'fee_agreement_notes' %} matter-fee-wide{% endif %}{% if field.name == 'fee_fixed_amount' or field.name == 'fee_hourly_rate' or field.name == 'fee_success_percentage' %} matter-fee-amount{% endif %}">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             <div>
               {{ field }}
               {{ field.errors }}
+              {% if field.help_text %}<small class="matter-fee-help">{{ field.help_text }}</small>{% endif %}
             </div>
           </div>
         {% endfor %}
@@ -77,12 +89,18 @@
   function toggleContractFeeFields() {
     const select = document.getElementById('id_fee_agreement_type');
     if (!select) return;
-    const show = ['SUCCESS', 'MIXED'].includes(select.value);
-    for (const id of ['id_fee_success_percentage', 'id_fee_success_basis']) {
+    const mode = select.value;
+    const visibleByField = {
+      id_fee_fixed_amount: ['FIXED', 'MIXED'].includes(mode),
+      id_fee_hourly_rate: mode === 'HOURLY',
+      id_fee_success_percentage: ['SUCCESS', 'MIXED'].includes(mode),
+      id_fee_success_basis: ['SUCCESS', 'MIXED'].includes(mode),
+    };
+    for (const [id, visible] of Object.entries(visibleByField)) {
       const input = document.getElementById(id);
       if (!input) continue;
       const row = input.closest('.form-group');
-      if (row) row.style.display = show ? '' : 'none';
+      if (row) row.style.display = visible ? '' : 'none';
     }
   }
   document.addEventListener('DOMContentLoaded', toggleContractFeeFields);

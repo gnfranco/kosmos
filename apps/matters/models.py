@@ -83,6 +83,23 @@ class Matter(AuditMixin, models.Model):
         choices=FEE_AGREEMENT_CHOICES,
         default="UNSPECIFIED",
     )
+    # Fixed contractual portion is independent of legacy flat_fee_amount.
+    # Never infer an agreed fixed fee from a legacy billing setting.
+    fee_fixed_amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0.01"))],
+    )
+    # Contractual hourly rate, separate from activity time-entry billing.
+    fee_hourly_rate = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal("0.01"))],
+    )
     fee_success_percentage = models.DecimalField(
         max_digits=5,
         decimal_places=2,

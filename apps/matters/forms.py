@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 
 from django import forms
@@ -38,6 +39,25 @@ class ContactComboboxWidget(forms.Widget):
         return context
 
 
+class BrazilianCurrencyField(forms.DecimalField):
+    """Accept pt-BR grouped amounts without changing the stored Decimal.
+
+    The default Django localized field accepts 2000,00; this also accepts
+    2.000,00 while rejecting irregular thousands separators.
+    """
+
+    _grouped_brl = re.compile(r"^[+-]?\d{1,3}(?:\.\d{3})+,\d{1,2}$")
+
+    def to_python(self, value):
+        if (
+            isinstance(value, str)
+            and (get_language() or "").lower().replace("_", "-") == "pt-br"
+            and self._grouped_brl.fullmatch(value.strip())
+        ):
+            value = value.replace(".", "")
+        return super().to_python(value)
+
+
 class MatterForm(forms.ModelForm):
     # Accept 25,50 in pt-BR without converting the stored Decimal to a
     # floating-point number. The value represents a contractual percentage.
@@ -52,8 +72,29 @@ class MatterForm(forms.ModelForm):
         widget=forms.TextInput(attrs={"inputmode": "decimal"}),
     )
 
+    fee_fixed_amount = BrazilianCurrencyField(
+        label=_("Contractual Fixed Fee (BRL)"),
+        required=False,
+        localize=True,
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
+        widget=forms.TextInput(attrs={"inputmode": "decimal"}),
+    )
+    fee_hourly_rate = BrazilianCurrencyField(
+        label=_("Contractual Hourly Rate (BRL)"),
+        required=False,
+        localize=True,
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
+        widget=forms.TextInput(attrs={"inputmode": "decimal"}),
+    )
+
     CONTRACT_FIELDS = (
         "fee_agreement_type",
+        "fee_fixed_amount",
+        "fee_hourly_rate",
         "fee_success_percentage",
         "fee_success_basis",
         "fee_agreement_notes",
@@ -77,6 +118,8 @@ class MatterForm(forms.ModelForm):
             "deferred_fees",
             "flat_fee_amount",
             "fee_agreement_type",
+            "fee_fixed_amount",
+            "fee_hourly_rate",
             "fee_success_percentage",
             "fee_success_basis",
             "fee_agreement_notes",
@@ -146,9 +189,11 @@ class MatterForm(forms.ModelForm):
             "flat_fee_amount": _("Flat Fee Amount"),
             "deferred_fees": _("Deferred Fee Arrangement"),
             "fee_agreement_type": _("Contractual Fee Arrangement"),
+            "fee_fixed_amount": _("Contractual Fixed Fee (BRL)"),
+            "fee_hourly_rate": _("Contractual Hourly Rate (BRL)"),
             "fee_success_percentage": _("Success Fee Percentage (%)"),
-            "fee_success_basis": _("Contractual Success Fee Basis"),
-            "fee_agreement_notes": _("Fee Agreement Notes"),
+            "fee_success_basis": _("What is the percentage applied to?"),
+            "fee_agreement_notes": _("Payment Terms"),
         }
 
     def __init__(self, *args, **kwargs):
@@ -206,6 +251,31 @@ class MatterForm(forms.ModelForm):
             for name in self.CONTRACT_FIELDS:
                 self.fields.pop(name)
 
+        # In the Brazilian form there is one contractual-fees editor.
+        # Legacy US invoicing controls are intentionally not presented; their
+        # existing persisted values remain untouched on every POST.
+        self.is_brazilian = (get_language() or "").lower().replace("_", "-") == "pt-br"
+        self.show_legacy_fee_notice = bool(
+            self.is_brazilian
+            and self.instance.pk
+            and self.instance.flat_fee_amount is not None
+        )
+        old_basis = (self.instance.fee_success_basis or "").strip()
+        self.needs_fee_basis_review = bool(
+            self.is_brazilian
+            and self.instance.pk
+            and old_basis
+            and old_basis.replace(" ", "").replace(",", "").replace(".", "").isdigit()
+        )
+        if self.is_brazilian:
+            for name in (
+                "billable",
+                "billing_type",
+                "deferred_fees",
+                "flat_fee_amount",
+            ):
+                self.fields.pop(name, None)
+
         # Existing cases must remain editable when their historical category
         # was deactivated. New cases only offer active categories.
         current_area_id = self.instance.practice_area_id
@@ -230,17 +300,29 @@ class MatterForm(forms.ModelForm):
             self.fields["fee_agreement_type"].widget.attrs["onchange"] = (
                 "toggleContractFeeFields()"
             )
-            if (get_language() or "").lower().replace("_", "-") == "pt-br":
+            self.fields["fee_success_basis"].help_text = _(
+                "Describe the contractual basis (e.g. amounts actually received), not just the claim value."
+            )
+            self.fields["fee_agreement_notes"].help_text = _(
+                "Specify due dates, installments and other conditions in the signed contract."
+            )
+            if self.is_brazilian:
                 self.fields["fee_success_percentage"].widget.attrs["placeholder"] = (
                     "25,00"
                 )
+                self.fields["fee_fixed_amount"].widget.attrs["placeholder"] = "2.000,00"
+                self.fields["fee_hourly_rate"].widget.attrs["placeholder"] = "250,00"
+                self.fields["fee_success_basis"].widget.attrs["placeholder"] = (
+                    "Ex.: valores efetivamente recebidos pelo cliente"
+                )
 
-        # Keep persisted billing codes unchanged; translate only their labels.
-        billing_labels = {"HOURLY": _("Hourly"), "FLAT_FEE": _("Flat Fee")}
-        self.fields["billing_type"].choices = [
-            (code, billing_labels.get(code, label))
-            for code, label in self.fields["billing_type"].choices
-        ]
+        # The US billing widgets remain available in non-Brazilian locales.
+        if "billing_type" in self.fields:
+            billing_labels = {"HOURLY": _("Hourly"), "FLAT_FEE": _("Flat Fee")}
+            self.fields["billing_type"].choices = [
+                (code, billing_labels.get(code, label))
+                for code, label in self.fields["billing_type"].choices
+            ]
 
         # A native type=date input displays in the browser's locale (often
         # MM/DD/YYYY on Android despite Django's pt-BR setting). Use an
@@ -266,7 +348,10 @@ class MatterForm(forms.ModelForm):
 
         arrangement = cleaned.get("fee_agreement_type", "UNSPECIFIED")
         if arrangement in ("SUCCESS", "MIXED"):
-            if cleaned.get("fee_success_percentage") is None:
+            if (
+                cleaned.get("fee_success_percentage") is None
+                and "fee_success_percentage" not in self.errors
+            ):
                 self.add_error(
                     "fee_success_percentage",
                     _("Enter the success fee percentage agreed in the contract."),
@@ -277,7 +362,46 @@ class MatterForm(forms.ModelForm):
                     _("Describe precisely the contractual basis for the percentage."),
                 )
         else:
-            # Do not carry an obsolete percentage forward after a mode change.
+            # Clear values no longer applicable to the selected agreement.
             cleaned["fee_success_percentage"] = None
             cleaned["fee_success_basis"] = ""
+
+        if "fee_fixed_amount" in self.fields:
+            if arrangement in ("FIXED", "MIXED"):
+                historical_empty = (
+                    self.instance.pk
+                    and self.instance.fee_agreement_type == arrangement
+                    and self.instance.fee_fixed_amount is None
+                )
+                if (
+                    cleaned.get("fee_fixed_amount") is None
+                    and not historical_empty
+                    and "fee_fixed_amount" not in self.errors
+                ):
+                    self.add_error(
+                        "fee_fixed_amount",
+                        _("Enter the fixed amount agreed in the contract."),
+                    )
+            else:
+                cleaned["fee_fixed_amount"] = None
+
+        if "fee_hourly_rate" in self.fields:
+            if arrangement == "HOURLY":
+                historical_empty = (
+                    self.instance.pk
+                    and self.instance.fee_agreement_type == arrangement
+                    and self.instance.fee_hourly_rate is None
+                )
+                if (
+                    cleaned.get("fee_hourly_rate") is None
+                    and not historical_empty
+                    and "fee_hourly_rate" not in self.errors
+                ):
+                    self.add_error(
+                        "fee_hourly_rate",
+                        _("Enter the contractual hourly rate."),
+                    )
+            else:
+                cleaned["fee_hourly_rate"] = None
+
         return cleaned

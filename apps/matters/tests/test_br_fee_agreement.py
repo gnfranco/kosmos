@@ -58,6 +58,7 @@ def test_mixed_fee_is_tracked_without_turning_into_flat_fee():
         form = MatterForm(
             _posted_fields(
                 fee_agreement_type="MIXED",
+                fee_fixed_amount="1500,00",
                 fee_success_percentage="20,00",
                 fee_agreement_notes="Entrada de R$ 1.500 mais êxito.",
             )
@@ -66,6 +67,7 @@ def test_mixed_fee_is_tracked_without_turning_into_flat_fee():
         matter = form.save()
     assert matter.fee_agreement_type == "MIXED"
     assert matter.fee_success_percentage == Decimal("20.00")
+    assert matter.fee_fixed_amount == Decimal("1500.00")
     assert matter.billing_type == "HOURLY"
 
 
@@ -81,6 +83,7 @@ def test_non_success_mode_removes_stale_percent_and_basis():
         form = MatterForm(
             _posted_fields(
                 fee_agreement_type="FIXED",
+                fee_fixed_amount="3000,00",
                 fee_success_percentage="30,00",
                 fee_success_basis="Quantia recuperada",
             ),
@@ -90,6 +93,7 @@ def test_non_success_mode_removes_stale_percent_and_basis():
         form.save()
     matter.refresh_from_db()
     assert matter.fee_agreement_type == "FIXED"
+    assert matter.fee_fixed_amount == Decimal("3000.00")
     assert matter.fee_success_percentage is None
     assert matter.fee_success_basis == ""
 
@@ -123,8 +127,8 @@ def test_real_http_case_creation_stores_fee_terms(client):
         body = page.content.decode()
         assert "Honorários contratuais" in body
         assert "Honorários de êxito (percentual)" in body
-        assert "Base de cálculo contratada" in body
-        assert "não calculam, emitem ou cobram" in body
+        assert "Sobre o que incide o percentual?" in body
+        assert "não emite cobranças nem calcula automaticamente" in body
         response = client.post("/matters/add", _posted_fields())
     assert response.status_code == 204
     matter = Matter.objects.get(name="Ação de teste")

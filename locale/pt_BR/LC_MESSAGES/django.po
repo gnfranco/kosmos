@@ -612,7 +612,7 @@ msgid "Success fee agreement"
 msgstr "Honorários de êxito (percentual)"
 
 msgid "Mixed fee agreement"
-msgstr "Honorários mistos (entrada e êxito)"
+msgstr "Honorários mistos (fixo + êxito)"
 
 msgid "Stage-based fee agreement"
 msgstr "Honorários por etapa"
@@ -649,3 +649,39 @@ msgstr "Informe o percentual de êxito previsto no contrato."
 
 msgid "Describe precisely the contractual basis for the percentage."
 msgstr "Descreva exatamente sobre qual valor incide o percentual contratado."
+
+msgid "Contractual Fixed Fee (BRL)"
+msgstr "Parcela fixa contratada (R$)"
+
+msgid "Contractual Hourly Rate (BRL)"
+msgstr "Valor por hora contratado (R$)"
+
+msgid "What is the percentage applied to?"
+msgstr "Sobre o que incide o percentual?"
+
+msgid "Payment Terms"
+msgstr "Condições de pagamento"
+
+msgid "Describe the contractual basis (e.g. amounts actually received), not just the claim value."
+msgstr "Descreva as verbas ou valores abrangidos pelo contrato (ex.: valores efetivamente recebidos). Não informe apenas o valor da causa."
+
+msgid "Specify due dates, installments and other conditions in the signed contract."
+msgstr "Informe entrada, vencimentos, parcelas e outras condições previstas no contrato assinado."
+
+msgid "Enter the fixed amount agreed in the contract."
+msgstr "Informe o valor fixo previsto no contrato."
+
+msgid "Enter the contractual hourly rate."
+msgstr "Informe o valor da hora previsto no contrato."
+
+msgid "Record the signed agreement here. This section does not generate invoices or calculate amounts owed."
+msgstr "Registre aqui o que foi contratado. Esta seção não emite cobranças nem calcula automaticamente honorários devidos."
+
+msgid "Old internal billing amount:"
+msgstr "Valor no faturamento interno antigo:"
+
+msgid "This amount was not copied into the contractual fixed fee. Check the signed contract before entering it."
+msgstr "Esse valor não foi transferido para a parcela fixa contratual. Confira o contrato assinado antes de informá-lo."
+
+msgid "The saved percentage basis contains only a number. Review the contractual description of which amounts are covered; do not assume that it is the claim value."
+msgstr "A base de incidência salva contém apenas um número. Confira quais verbas estão abrangidas pelo contrato; não presuma que seja o valor da causa."
