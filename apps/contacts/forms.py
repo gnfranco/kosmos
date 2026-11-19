@@ -11,6 +11,7 @@ from config.helpers import normalize_phone
 from config.settings import CustomFormRendererCompact
 
 from .br_documents import (
+    format_br_document,
     is_valid_cnpj,
     is_valid_cpf,
     normalize_br_phone,
@@ -108,6 +109,12 @@ class ContactForm(forms.ModelForm):
             for key in self.BR_FIELDS:
                 self.fields.pop(key, None)
         else:
+            # Format on GET without changing the stored identifier. A POST
+            # still validates and canonicalizes dotted/masked input.
+            if not self.is_bound and self.instance.pk and self.instance.tax_id:
+                self.initial["tax_id"] = format_br_document(
+                    self.instance.tax_id, self.instance.person_type
+                )
             self.fields["person_type"].choices = (
                 ("UNSPECIFIED", _("Not specified")),
                 ("PF", _("Individual (CPF)")),

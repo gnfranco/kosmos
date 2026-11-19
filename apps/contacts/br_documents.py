@@ -22,6 +22,38 @@ def normalize_document(value):
     return cleaned
 
 
+def format_br_document(value, person_type, *, masked=False):
+    """Add the standard CPF/CNPJ punctuation for display only.
+
+    The model retains the canonical value without punctuation.
+    Details show only the last four original characters, including for
+    alphanumeric CNPJ. Unknown or malformed identifiers are never exposed
+    in masked mode.
+    """
+    if not value:
+        return ""
+    if person_type == "PF" and CPF_PATTERN.fullmatch(value):
+        width = 11
+        segments = (3, 3, 3, 2)
+        separators = (".", ".", "-")
+    elif person_type == "PJ" and CNPJ_PATTERN.fullmatch(value):
+        width = 14
+        segments = (2, 3, 3, 4, 2)
+        separators = (".", ".", "/", "-")
+    else:
+        return ("••••" + value[-4:]) if masked else value
+
+    chars = ("•" * (width - 4) + value[-4:]) if masked else value
+    output = []
+    cursor = 0
+    for index, size in enumerate(segments):
+        output.append(chars[cursor : cursor + size])
+        cursor += size
+        if index < len(separators):
+            output.append(separators[index])
+    return "".join(output)
+
+
 def is_valid_cpf(value):
     if not CPF_PATTERN.fullmatch(value or "") or len(set(value)) == 1:
         return False

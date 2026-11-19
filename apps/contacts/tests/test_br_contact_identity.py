@@ -4,6 +4,7 @@ import pytest
 from django.utils import translation
 
 from apps.contacts.br_documents import (
+    format_br_document,
     is_valid_cnpj,
     is_valid_cpf,
     normalize_br_phone,
@@ -61,7 +62,7 @@ def test_pf_form_uses_validated_cpf_and_phone(contact):
     assert person.tax_id == "52998224725"
     assert person.phone1 == "16999991234"
     assert person.history.first().tax_id == "52998224725"
-    assert person.tax_id_masked == "••••4725"
+    assert person.tax_id_masked == "•••.•••.•47-25"
 
 
 def test_pj_form_accepts_alphanumeric_cnpj_and_trade_name():
@@ -149,11 +150,11 @@ def test_http_roundtrip_add_edit_and_masked_details(client):
         created = Contact.objects.get(name="Pessoa de exemplo")
         edited = client.get(f"/contacts/{created.pk}/edit")
         assert edited.status_code == 200
-        assert "52998224725" in edited.content.decode()
+        assert "529.982.247-25" in edited.content.decode()
         details = client.get(f"/contacts/{created.pk}/details")
         assert details.status_code == 200
         html = details.content.decode()
-        assert "••••4725" in html
+        assert "•••.•••.•47-25" in html
         assert "52998224725" not in html
         saved = client.post(
             f"/contacts/{created.pk}/edit",
@@ -210,3 +211,42 @@ def test_invalid_tax_document_is_rejected_by_http(client):
     assert "O CNPJ informado possui dígitos verificadores inválidos." in (
         response.content.decode()
     )
+
+
+def test_document_punctuation_is_only_a_presentation_concern():
+    assert format_br_document("52998224725", "PF") == "529.982.247-25"
+    assert format_br_document("52998224725", "PF", masked=True) == "•••.•••.•47-25"
+    assert format_br_document("04252011000110", "PJ") == "04.252.011/0001-10"
+    assert (
+        format_br_document("04252011000110", "PJ", masked=True) == "••.•••.•••/••01-10"
+    )
+    assert format_br_document("00000000E08G12", "PJ") == "00.000.000/E08G-12"
+    assert (
+        format_br_document("00000000E08G12", "PJ", masked=True) == "••.•••.•••/••8G-12"
+    )
+    assert format_br_document("52998224725", "UNSPECIFIED", masked=True) == "••••4725"
+
+
+def test_cnpj_edit_uses_mask_and_save_retains_canonical_storage():
+    company = Contact.objects.create(
+        name="Empresa fictícia",
+        person_type="PJ",
+        tax_id="00000000E08G12",
+    )
+    with translation.override("pt-br"):
+        form = ContactForm(instance=company)
+        assert form.initial["tax_id"] == "00.000.000/E08G-12"
+        assert company.tax_id_masked == "••.•••.•••/••8G-12"
+        submitted = ContactForm(
+            {
+                "name": "Empresa fictícia",
+                "person_type": "PJ",
+                "tax_id": form.initial["tax_id"],
+            },
+            instance=company,
+        )
+        assert submitted.is_valid(), submitted.errors.as_json()
+        submitted.save()
+
+    company.refresh_from_db()
+    assert company.tax_id == "00000000E08G12"

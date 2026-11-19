@@ -3,6 +3,7 @@ from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 from apps.accounts.models import CustomUser
+from apps.contacts.br_documents import format_br_document
 from apps.folders.models import Folder
 from apps.intakes.models import Intake
 from utils.models import AuditMixin
@@ -115,8 +116,8 @@ class Contact(AuditMixin, models.Model):
 
     @property
     def tax_id_masked(self):
-        """Internal details display only the last four characters."""
-        return ("••••" + self.tax_id[-4:]) if self.tax_id else ""
+        """Masked CPF/CNPJ with Brazilian punctuation and last four visible."""
+        return format_br_document(self.tax_id, self.person_type, masked=True)
 
     def deletion_blockers(self):
         """Why this contact must not be deleted, as phrases that finish the
