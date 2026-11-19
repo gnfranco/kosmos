@@ -1,8 +1,17 @@
 import pytest
+from django.utils import translation
 
 from apps.contacts.forms import ContactForm
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.fixture(autouse=True)
+def us_legacy_form_locale():
+    # These legacy test cases explicitly exercise US phone parsing.
+    # Brazilian phone behavior has its own pt-br regression suite.
+    with translation.override("en-us"):
+        yield
 
 
 def test_form_valid(contact_data):

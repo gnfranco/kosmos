@@ -1,11 +1,12 @@
+{% load i18n %}
 <div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
       <h1 class="modal-title">
         {% if not edit %}
-          Add Contact
+          {% trans "Add Contact" %}
         {% else %}
-          Edit Contact
+          {% trans "Edit Contact" %}
         {% endif %}
       </h1>
       <div>
@@ -24,7 +25,7 @@
         {% if intake_id %}<input type="hidden" name="intake_id" value="{{ intake_id }}" />{% endif %}
         <div class="contacts-form-left form-compact col2">
           {% for field in form %}
-            {% if field.name == 'folder' or field.name == 'name' or field.name == 'company' or field.name == 'email' or field.name == 'email2' or field.name == 'address' %}
+            {% if field.name == 'folder' or field.name == 'name' or field.name == 'person_type' or field.name == 'tax_id' or field.name == 'trade_name' or field.name == 'company' or field.name == 'email' or field.name == 'email2' or field.name == 'address' %}
               <div class="form-group field-{{ field.name }}">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 <div>{{ field }}{{ field.errors }}</div>
@@ -50,19 +51,19 @@
                 class="btn btn-danger"
                 hx-confirm="Delete this contact? It is removed from every matter it is on, and this cannot be undone."
                 hx-delete="{% url 'contacts:delete' id=contact.id %}"
-                hx-target="#htmx-modal-container">Delete</button>
+                hx-target="#htmx-modal-container">{% trans "Delete" %}</button>
       {% elif matter_return %}
         <button type="button"
                 class="btn btn-secondary"
                 hx-get="{% url 'matters:client-cancel' %}"
                 hx-target="#htmx-modal-container .modal-dialog"
-                hx-swap="outerHTML">Back</button>
+                hx-swap="outerHTML">{% trans "Back" %}</button>
       {% else %}
         <button type="button"
                 class="btn btn-secondary"
-                @click="$dispatch('close-modal')">Cancel</button>
+                @click="$dispatch('close-modal')">{% trans "Cancel" %}</button>
       {% endif %}
-      <button type="submit" form="contact-form" class="btn btn-success">Submit</button>
+      <button type="submit" form="contact-form" class="btn btn-success">{% trans "Save" %}</button>
     </div>
   </div>
 </div>

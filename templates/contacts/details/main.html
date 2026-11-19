@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load phone_numbers %}
 <div class="contact-tab-content">
   {# Hidden div for copying all contact details #}
@@ -10,9 +11,9 @@
 {% if selected_contact.address %}{{ selected_contact.address }}{% endif %}{% if selected_contact.email %}
 {{ selected_contact.email }}{% endif %}{% if selected_contact.email2 %}
 {{ selected_contact.email2 }}{% endif %}{% if selected_contact.phone1 %}
-{{ selected_contact.phone1|phone_number }}{% if selected_contact.phone1_label %} - {{ selected_contact.phone1_label }}{% endif %}{% endif %}{% if selected_contact.phone2 %}
-{{ selected_contact.phone2|phone_number }}{% if selected_contact.phone2_label %} - {{ selected_contact.phone2_label }}{% endif %}{% endif %}{% if selected_contact.phone3 %}
-{{ selected_contact.phone3|phone_number }}{% if selected_contact.phone3_label %} - {{ selected_contact.phone3_label }}{% endif %}{% endif %}
+{{ selected_contact.phone1|phone_number:selected_contact.person_type }}{% if selected_contact.phone1_label %} - {{ selected_contact.phone1_label }}{% endif %}{% endif %}{% if selected_contact.phone2 %}
+{{ selected_contact.phone2|phone_number:selected_contact.person_type }}{% if selected_contact.phone2_label %} - {{ selected_contact.phone2_label }}{% endif %}{% endif %}{% if selected_contact.phone3 %}
+{{ selected_contact.phone3|phone_number:selected_contact.person_type }}{% if selected_contact.phone3_label %} - {{ selected_contact.phone3_label }}{% endif %}{% endif %}
 {{ selected_contact.website }}</div>
   {# djlint:on #}
   {% comment %}
@@ -50,6 +51,26 @@
             </a>
           {% endif %}
         </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if selected_contact.person_type != "UNSPECIFIED" %}
+    <div class="contact-card">
+      <div class="contact-card-text-vertical">
+        <span class="strong">{% trans "Brazilian Registration" %}</span>
+        <span>
+          {% if selected_contact.person_type == "PF" %}
+            {% trans "Individual (CPF)" %}
+          {% elif selected_contact.person_type == "PJ" %}
+            {% trans "Legal entity (CNPJ)" %}
+          {% endif %}
+        </span>
+        {% if selected_contact.tax_id %}
+          <span>{% if selected_contact.person_type == "PF" %}CPF{% else %}CNPJ{% endif %}: {{ selected_contact.tax_id_masked }}</span>
+        {% endif %}
+        {% if selected_contact.person_type == "PJ" and selected_contact.trade_name %}
+          <span>{% trans "Trade Name" %}: {{ selected_contact.trade_name }}</span>
+        {% endif %}
       </div>
     </div>
   {% endif %}
@@ -100,16 +121,16 @@
           <div class="contact-item contact-phone-item">
             <div class="contact-phone-text">
               <i class="icon-phone"></i>
-              {{ selected_contact.phone1|phone_number }} - {{ selected_contact.phone1_label|lower }}
+              {{ selected_contact.phone1|phone_number:selected_contact.person_type }} - {{ selected_contact.phone1_label|lower }}
             </div>
             <div class="contact-phone-buttons">
               <button type="button"
                       class="btn btn-sm action-btn copy-btn"
-                      data-copy="{{ selected_contact.phone1|phone_number }}"
+                      data-copy="{{ selected_contact.phone1|phone_number:selected_contact.person_type }}"
                       title="Copy phone number">
                 <i class="icon-copy"></i>
               </button>
-              <a href="tel:{{ selected_contact.phone1|phone_tel }}"
+              <a href="tel:{{ selected_contact.phone1|phone_tel:selected_contact.person_type }}"
                  class="btn btn-sm action-btn copy-btn contact-call-btn"
                  title="Call">
                 <i class="icon-phone-outgoing"></i>
@@ -121,16 +142,16 @@
           <div class="contact-item contact-phone-item">
             <div class="contact-phone-text">
               <i class="icon-phone"></i>
-              {{ selected_contact.phone2|phone_number }} - {{ selected_contact.phone2_label|lower }}
+              {{ selected_contact.phone2|phone_number:selected_contact.person_type }} - {{ selected_contact.phone2_label|lower }}
             </div>
             <div class="contact-phone-buttons">
               <button type="button"
                       class="btn btn-sm action-btn copy-btn"
-                      data-copy="{{ selected_contact.phone2|phone_number }}"
+                      data-copy="{{ selected_contact.phone2|phone_number:selected_contact.person_type }}"
                       title="Copy phone number">
                 <i class="icon-copy"></i>
               </button>
-              <a href="tel:{{ selected_contact.phone2|phone_tel }}"
+              <a href="tel:{{ selected_contact.phone2|phone_tel:selected_contact.person_type }}"
                  class="btn btn-sm action-btn copy-btn contact-call-btn"
                  title="Call">
                 <i class="icon-phone-outgoing"></i>
@@ -142,16 +163,16 @@
           <div class="contact-item contact-phone-item">
             <div class="contact-phone-text">
               <i class="icon-phone"></i>
-              {{ selected_contact.phone3|phone_number }} - {{ selected_contact.phone3_label|lower }}
+              {{ selected_contact.phone3|phone_number:selected_contact.person_type }} - {{ selected_contact.phone3_label|lower }}
             </div>
             <div class="contact-phone-buttons">
               <button type="button"
                       class="btn btn-sm action-btn copy-btn"
-                      data-copy="{{ selected_contact.phone3|phone_number }}"
+                      data-copy="{{ selected_contact.phone3|phone_number:selected_contact.person_type }}"
                       title="Copy phone number">
                 <i class="icon-copy"></i>
               </button>
-              <a href="tel:{{ selected_contact.phone3|phone_tel }}"
+              <a href="tel:{{ selected_contact.phone3|phone_tel:selected_contact.person_type }}"
                  class="btn btn-sm action-btn copy-btn contact-call-btn"
                  title="Call">
                 <i class="icon-phone-outgoing"></i>

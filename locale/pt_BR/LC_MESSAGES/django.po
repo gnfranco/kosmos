@@ -685,3 +685,64 @@ msgstr "Esse valor não foi transferido para a parcela fixa contratual. Confira 
 
 msgid "The saved percentage basis contains only a number. Review the contractual description of which amounts are covered; do not assume that it is the claim value."
 msgstr "A base de incidência salva contém apenas um número. Confira quais verbas estão abrangidas pelo contrato; não presuma que seja o valor da causa."
+
+msgid "Person Type"
+msgstr "Tipo de pessoa"
+
+msgid "CPF or CNPJ"
+msgstr "CPF ou CNPJ"
+
+msgid "Trade Name"
+msgstr "Nome fantasia"
+
+msgid "Individual (CPF)"
+msgstr "Pessoa física (CPF)"
+
+msgid "Legal entity (CNPJ)"
+msgstr "Pessoa jurídica (CNPJ)"
+
+msgid "Name or Legal Name"
+msgstr "Nome completo ou razão social"
+
+msgid "Company / Affiliation"
+msgstr "Empresa / vínculo"
+
+msgid "Telephone 1"
+msgstr "Telefone 1"
+
+msgid "Telephone 2"
+msgstr "Telefone 2"
+
+msgid "Telephone 3"
+msgstr "Telefone 3"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Enter a valid CPF/CNPJ format."
+msgstr "Informe CPF/CNPJ com caracteres válidos."
+
+msgid "CPF has invalid check digits."
+msgstr "O CPF informado possui dígitos verificadores inválidos."
+
+msgid "CNPJ has invalid check digits."
+msgstr "O CNPJ informado possui dígitos verificadores inválidos."
+
+msgid "Select individual or legal entity for CPF/CNPJ."
+msgstr "Selecione pessoa física ou jurídica para cadastrar CPF/CNPJ."
+
+msgid "Enter a Brazilian telephone with DDD (10 or 11 digits)."
+msgstr "Informe telefone brasileiro com DDD (10 ou 11 dígitos)."
+
+msgid "Add Contact"
+msgstr "Adicionar contato"
+
+msgid "Edit Contact"
+msgstr "Editar contato"
+
+msgid "Brazilian Registration"
+msgstr "Cadastro brasileiro"
+
+
+msgid "Name or legal name must be 100 characters or fewer."
+msgstr "Nome completo ou razão social deve ter no máximo 100 caracteres."
