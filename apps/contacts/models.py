@@ -80,6 +80,18 @@ class Contact(AuditMixin, models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     folder = models.ForeignKey(Folder, on_delete=models.SET_NULL, blank=True, null=True)
     name = models.CharField(max_length=100)
+    # Brazilian legal identity is optional for legacy/foreign contacts.
+    # Do not make it unique until the legacy import/deduplication is reviewed.
+    PERSON_TYPE_CHOICES = (
+        ("UNSPECIFIED", "Not specified"),
+        ("PF", "Individual (Brazil)"),
+        ("PJ", "Legal entity (Brazil)"),
+    )
+    person_type = models.CharField(
+        max_length=12, choices=PERSON_TYPE_CHOICES, default="UNSPECIFIED"
+    )
+    tax_id = models.CharField(max_length=14, blank=True, default="")
+    trade_name = models.CharField(max_length=150, blank=True, default="")
     company = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone1 = models.CharField(max_length=50, blank=True, null=True)
@@ -100,6 +112,11 @@ class Contact(AuditMixin, models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @property
+    def tax_id_masked(self):
+        """Internal details display only the last four characters."""
+        return ("••••" + self.tax_id[-4:]) if self.tax_id else ""
 
     def deletion_blockers(self):
         """Why this contact must not be deleted, as phrases that finish the

@@ -4,8 +4,8 @@ register = template.Library()
 
 
 @register.filter("phone_number")
-def phone_number(value):
-    """Format raw digits to (XXX) XXX-XXXX for display."""
+def phone_number(value, person_type=None):
+    """Format Brazilian typed contacts with DDD, preserving US legacy mode."""
     if not value:
         return value
 
@@ -21,6 +21,9 @@ def phone_number(value):
     # Strip any non-digits (for legacy data)
     digits = "".join(c for c in value if c.isdigit())
 
+    if person_type in ("PF", "PJ") and len(digits) in (10, 11):
+        return f"({digits[:2]}) {digits[2:-4]}-{digits[-4:]}" + extension
+
     if len(digits) == 10:
         formatted = f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
         return formatted + extension
@@ -29,8 +32,8 @@ def phone_number(value):
 
 
 @register.filter("phone_tel")
-def phone_tel(value):
-    """Format phone number for tel: protocol."""
+def phone_tel(value, person_type=None):
+    """Format telephone link for BR identity, preserving US legacy links."""
     if not value:
         return ""
 
@@ -41,6 +44,9 @@ def phone_tel(value):
 
     # Strip all non-digits
     digits = "".join(c for c in value if c.isdigit())
+
+    if person_type in ("PF", "PJ") and len(digits) in (10, 11):
+        return f"+55{digits}"
 
     # Handle 10-digit US numbers
     if len(digits) == 10:
